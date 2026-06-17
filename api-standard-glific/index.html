@@ -1,0 +1,1039 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../adding-a-new-program-type/">
+      
+      
+        <link rel="next" href="../architecture/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Frappe API Standard for Glific Webhook Compatibility - TAP LMS Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#frappe-api-standard-for-glific-webhook-compatibility" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="TAP LMS Docs" class="md-header__button md-logo" aria-label="TAP LMS Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            TAP LMS Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Frappe API Standard for Glific Webhook Compatibility
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="TAP LMS Docs" class="md-nav__button md-logo" aria-label="TAP LMS Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    TAP LMS Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TAP LMS Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adding-a-new-program-type/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adding a New Program Type — Developer Playbook
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe API Standard for Glific Webhook Compatibility
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe API Standard for Glific Webhook Compatibility
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-no-frappe-message-wrapper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. No Frappe message wrapper
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-flat-structure-only-no-nested-objects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Flat structure only — no nested objects
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-no-arrays" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. No arrays
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-snake_case-ascii-only-no-special-characters-in-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. snake_case, ASCII-only, no special characters in keys
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-sanitize-values-that-go-into-keys-or-ids" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Sanitize values that go into keys or IDs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-status-envelope-success-status-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Status envelope — success + status required
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-errors-return-http-200-with-success-false-not-4xx5xx" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Errors return HTTP 200 with success: false, not 4xx/5xx
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-numeric-and-boolean-types-stay-typed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Numeric and boolean types stay typed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-keep-strings-whatsapp-friendly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Keep strings WhatsApp-friendly
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-test-contract-with-curl-before-declaring-done" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Test contract with curl before declaring done
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#variant-responses-documented-not-enforced-in-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Variant responses — documented, not enforced in code
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documenting-status-enum-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documenting status enum values
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#versioning-posture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Versioning posture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-example-good-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference example — good response
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-use-this-doc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to use this doc
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TAP LMS Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../operator-tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TAP LMS Operator Tutorial — Running a Batch from Start to Finish
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reusable-components/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TAP LMS — Reusability Booklet for the Next Project
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-no-frappe-message-wrapper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. No Frappe message wrapper
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-flat-structure-only-no-nested-objects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Flat structure only — no nested objects
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-no-arrays" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. No arrays
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-snake_case-ascii-only-no-special-characters-in-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. snake_case, ASCII-only, no special characters in keys
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-sanitize-values-that-go-into-keys-or-ids" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Sanitize values that go into keys or IDs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-status-envelope-success-status-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Status envelope — success + status required
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-errors-return-http-200-with-success-false-not-4xx5xx" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Errors return HTTP 200 with success: false, not 4xx/5xx
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-numeric-and-boolean-types-stay-typed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Numeric and boolean types stay typed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-keep-strings-whatsapp-friendly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Keep strings WhatsApp-friendly
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-test-contract-with-curl-before-declaring-done" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Test contract with curl before declaring done
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#variant-responses-documented-not-enforced-in-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Variant responses — documented, not enforced in code
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documenting-status-enum-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documenting status enum values
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#versioning-posture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Versioning posture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reference-example-good-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reference example — good response
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-use-this-doc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to use this doc
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="frappe-api-standard-for-glific-webhook-compatibility">Frappe API Standard for Glific Webhook Compatibility</h1>
+<p><strong>Last verified:</strong> 2026-05-13. Rules below are unchanged by CR-002 v2 and CR-003 — the flat-map contract, status envelope, and numeric-suffix-expansion rules all stay as written.</p>
+<p>All Frappe whitelisted API endpoints in this project are consumed by Glific webhook nodes. Glific only reliably reads flat, top-level key-value pairs from webhook responses. Every API endpoint must follow the rules in this document — both for new endpoints and when modifying existing ones.</p>
+<p><strong>Source of truth split:</strong>
+- This doc defines <strong>HOW</strong> endpoints should be shaped (the contract every endpoint follows).
+- <code>docs/glific-api-reference-v2.md</code> defines <strong>WHAT</strong> each specific endpoint returns (per-endpoint schema, status enums, sample responses). v2 supersedes v1 as of 2026-05-13.</p>
+<p>When in doubt, this doc wins.</p>
+<hr />
+<h2 id="rules">Rules</h2>
+<h3 id="1-no-frappe-message-wrapper">1. No Frappe <code>message</code> wrapper</h3>
+<p>Do NOT <code>return</code> a dict from <code>@frappe.whitelist()</code> methods — Frappe wraps the return value under a top-level <code>"message"</code> key, forcing Glific to navigate one extra level. Instead, write keys directly to the response:</p>
+<pre><code class="language-python">@frappe.whitelist(allow_guest=True)
+def my_endpoint(...):
+    payload = {
+        &quot;success&quot;: True,
+        &quot;status&quot;: &quot;ok&quot;,
+        &quot;current_week&quot;: 3,
+        ...
+    }
+    frappe.local.response.update(payload)
+    # do not return anything
+</code></pre>
+<p>Glific then reads <code>@results.webhook.current_week</code> directly, not <code>@results.webhook.message.current_week</code>.</p>
+<p><strong>Convention break note:</strong> this is a deliberate departure from Frappe's default <code>@whitelist</code> behavior. Internal callers that need the response should call the underlying business-logic functions directly, NOT via HTTP. The whitelisted endpoint is for Glific only.</p>
+<hr />
+<h3 id="2-flat-structure-only-no-nested-objects">2. Flat structure only — no nested objects</h3>
+<p>Every value in the response must be a scalar (string, number, boolean, or <code>None</code>). No dicts, no lists of dicts. If your logical model has nesting, flatten it with prefixed keys:</p>
+<table>
+<thead>
+<tr>
+<th>Nested (bad)</th>
+<th>Flat (good)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>question.text</code></td>
+<td><code>question_text</code></td>
+</tr>
+<tr>
+<td><code>question.options.A</code></td>
+<td><code>option_a</code></td>
+</tr>
+<tr>
+<td><code>user.profile.name</code></td>
+<td><code>user_name</code></td>
+</tr>
+<tr>
+<td><code>attempt.score.percentage</code></td>
+<td><code>score_percentage</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="3-no-arrays">3. No arrays</h3>
+<p>Glific cannot reliably iterate arrays inside a webhook response. If you have a list, flatten to indexed keys with a count:</p>
+<pre><code class="language-json">{
+  &quot;item_count&quot;: 3,
+  &quot;item_1&quot;: &quot;apple&quot;,
+  &quot;item_2&quot;: &quot;banana&quot;,
+  &quot;item_3&quot;: &quot;cherry&quot;
+}
+</code></pre>
+<p>Cap the number of indexed keys at a documented maximum (e.g. <code>item_1</code> through <code>item_10</code>).</p>
+<p>For complex items, use the same numeric-suffix pattern across multiple fields:</p>
+<pre><code class="language-json">{
+  &quot;content_count&quot;: 2,
+  &quot;content_1_type&quot;: &quot;Reading Activity&quot;,
+  &quot;content_1_id&quot;: &quot;RA-001&quot;,
+  &quot;content_2_type&quot;: &quot;Quiz&quot;,
+  &quot;content_2_id&quot;: &quot;QZ-008&quot;
+}
+</code></pre>
+<hr />
+<h3 id="4-snake_case-ascii-only-no-special-characters-in-keys">4. snake_case, ASCII-only, no special characters in keys</h3>
+<p>Glific's <code>@results.x.y</code> expression syntax breaks on spaces, <code>?</code>, <code>.</code>, <code>-</code>, and non-ASCII characters in keys. Stick to <code>lowercase_snake_case</code>. If source data has dirty keys, normalize them before writing the response.</p>
+<hr />
+<h3 id="5-sanitize-values-that-go-into-keys-or-ids">5. Sanitize values that go into keys or IDs</h3>
+<p>If an ID field embeds free-form text (e.g. <code>"What is X?QN12345"</code>), extract the clean code with a regex before returning it. Never return user-generated text concatenated with system IDs as a single value.</p>
+<hr />
+<h3 id="6-status-envelope-success-status-required">6. Status envelope — <code>success</code> + <code>status</code> required</h3>
+<p>Every response must include these two keys, even on success:</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;status&quot;: &quot;&lt;short_machine_readable_code&gt;&quot;
+}
+</code></pre>
+<p><code>status</code> is a snake_case enum (<code>quiz_resumed</code>, <code>quiz_completed</code>, <code>not_found</code>, <code>already_attempted</code>, <code>invalid_input</code>, etc.) so Glific flows can branch on it with a Split-by-Expression node.</p>
+<p><code>user_message</code> (a short human-readable string safe to display in WhatsApp) is <strong>optional</strong> — include it when there's a natural user-facing message for the response, omit when the response is consumed by flow logic only.</p>
+<hr />
+<h3 id="7-errors-return-http-200-with-success-false-not-4xx5xx">7. Errors return HTTP 200 with <code>success: false</code>, not 4xx/5xx</h3>
+<p>Glific treats non-200 responses as webhook failures and kills the flow. For expected business errors (validation failures, "user not enrolled", "quiz already submitted"), return HTTP 200 with:</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: false,
+  &quot;status&quot;: &quot;&lt;error_code&gt;&quot;,
+  &quot;user_message&quot;: &quot;&lt;message safe to show the user&gt;&quot;,
+  &quot;error_detail&quot;: &quot;&lt;optional, for logs&gt;&quot;
+}
+</code></pre>
+<p>Reserve real HTTP error codes (500, etc.) for genuine unhandled exceptions.</p>
+<hr />
+<h3 id="8-numeric-and-boolean-types-stay-typed">8. Numeric and boolean types stay typed</h3>
+<p>Return <code>5</code>, not <code>"5"</code>. Return <code>true</code>, not <code>"true"</code>. Glific's comparison operators behave differently on strings vs numbers.</p>
+<hr />
+<h3 id="9-keep-strings-whatsapp-friendly">9. Keep strings WhatsApp-friendly</h3>
+<p>Any string that may end up displayed in WhatsApp (<code>user_message</code>, <code>question_text</code>, option text, etc.) should be plain text, no HTML, no markdown unless WhatsApp-supported:</p>
+<ul>
+<li><code>*bold*</code></li>
+<li><code>_italic_</code></li>
+<li><code>~strike~</code></li>
+<li><code>`code`</code></li>
+</ul>
+<hr />
+<h3 id="10-test-contract-with-curl-before-declaring-done">10. Test contract with <code>curl</code> before declaring done</h3>
+<p>After implementing or modifying an endpoint, run it via <code>curl</code> or <code>bench execute</code> and verify the JSON response is:</p>
+<ul>
+<li>Flat (no nested objects, no arrays)</li>
+<li>Has no top-level <code>message</code> wrapper</li>
+<li>Uses correct types (numbers as numbers, booleans as booleans)</li>
+<li>Includes <code>success</code> and <code>status</code> keys</li>
+</ul>
+<hr />
+<h2 id="variant-responses-documented-not-enforced-in-code">Variant responses — documented, not enforced in code</h2>
+<p>When an endpoint's response shape varies by state (e.g. <code>quiz_completed=true</code> vs <code>false</code>, "submission accepted" vs "duplicate"), the MVP discipline is:</p>
+<ol>
+<li><strong>Each variant gets its own entry in the API reference doc</strong> (<code>docs/glific-api-reference-v2.md</code>) with the full key list for that variant.</li>
+<li><strong>Flow builders branch on <code>status</code> first</strong>, then read only the fields documented for that variant.</li>
+<li><strong>Backend code does NOT need to return every key across all variants</strong> — that's documentation discipline, not code discipline.</li>
+</ol>
+<p>Example: <code>submit_answer</code> has two variants — one when more questions remain, one when the quiz is complete. The reference doc shows both. The backend returns whichever variant applies. The Glific flow reads <code>status</code> first (<code>quiz_in_progress</code> vs <code>quiz_completed</code>) and only accesses the fields valid for that variant.</p>
+<p>This is a deliberate simplification — enforcing "always return every key with sentinels" adds backend complexity for marginal flow-builder benefit, given the doc + status-first branching pattern works.</p>
+<hr />
+<h2 id="documenting-status-enum-values">Documenting <code>status</code> enum values</h2>
+<p>Every endpoint's <code>status</code> enum must be enumerated in <code>docs/glific-api-reference-v2.md</code> in that endpoint's section. New <code>status</code> values are a safe additive change (Glific flows handling only known values continue to work). Renaming or removing existing <code>status</code> values is a breaking change — coordinate with the Glific team before shipping.</p>
+<hr />
+<h2 id="versioning-posture">Versioning posture</h2>
+<p>Breaking changes (renaming keys, removing keys, changing types) require:</p>
+<ol>
+<li>Glific team notified at least one sprint ahead.</li>
+<li>Old endpoint stays callable under a <code>v1</code> path namespace.</li>
+<li>New shape lives at a <code>v2</code> path namespace.</li>
+<li>Old endpoint is deprecated, not deleted; deletion only after Glific confirms zero flows reference it.</li>
+</ol>
+<p>Field <strong>additions</strong> are non-breaking — flow builders reading old keys still work. Add freely; document in the reference doc.</p>
+<hr />
+<h2 id="reference-example-good-response">Reference example — good response</h2>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;status&quot;: &quot;quiz_resumed&quot;,
+  &quot;user_message&quot;: &quot;Welcome back! Continuing from question 2.&quot;,
+  &quot;quiz_attempt_id&quot;: &quot;2rscijc6nd&quot;,
+  &quot;quiz_name&quot;: &quot;BasicQuiz_Quiz_B&quot;,
+  &quot;total_questions&quot;: 5,
+  &quot;questions_answered&quot;: 1,
+  &quot;correct_so_far&quot;: 1,
+  &quot;question_index&quot;: 2,
+  &quot;question_id&quot;: &quot;QN43903&quot;,
+  &quot;question_text&quot;: &quot;Which is an example of a need?&quot;,
+  &quot;question_type&quot;: &quot;multiple_choice&quot;,
+  &quot;option_count&quot;: 4,
+  &quot;option_a&quot;: &quot;Chocolate&quot;,
+  &quot;option_b&quot;: &quot;Video game&quot;,
+  &quot;option_c&quot;: &quot;Food&quot;,
+  &quot;option_d&quot;: &quot;Movie ticket&quot;
+}
+</code></pre>
+<p>All values are scalars. No nested objects. No arrays. Flat top-level keys. <code>success</code> and <code>status</code> both present. <code>user_message</code> included because the response will be displayed to the student.</p>
+<hr />
+<h2 id="how-to-use-this-doc">How to use this doc</h2>
+<ul>
+<li><strong>Writing a new whitelisted endpoint:</strong> read this doc end-to-end before starting. Reference it in the PR description.</li>
+<li><strong>Modifying an existing endpoint:</strong> check the response shape against these rules. If the existing shape violates them, fix it as part of the change (it's a pre-existing bug).</li>
+<li><strong>Reviewing a PR that touches a whitelisted endpoint:</strong> run rule 10 (curl test) and verify rules 1–9 by inspection.</li>
+<li><strong>In task descriptions:</strong> reference "Follow <code>docs/api-standard-glific.md</code>" so feature-builder and code-reviewer agents pull it into their context automatically.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
