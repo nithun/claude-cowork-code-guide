@@ -1,0 +1,1561 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Build or modify Frappe HTTP/REST API endpoints — whitelisted Python methods, the auto-REST resource API, webhook receivers, and authenticated external integrations. Trigger whenever the user mentions API, REST, endpoint, integration, webhook, OAuth, API key, calling Frappe from another service, or exposing data to a frontend (mobile app, React/Vue SPA, Zapier-style automation). Also use when securing or rate-limiting existing endpoints.">
+      
+      
+      
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../bench/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Frappe API skill - claude-cowork-code — Team Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#frappe-api-skill" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="claude-cowork-code — Team Guide" class="md-header__button md-logo" aria-label="claude-cowork-code — Team Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            claude-cowork-code — Team Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Frappe API skill
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="claude-cowork-code — Team Guide" class="md-nav__button md-logo" aria-label="claude-cowork-code — Team Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    claude-cowork-code — Team Guide
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to use claude-cowork-code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adopt-for-new-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adopt it for a new project
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adopt-frappe-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adopt it for a new Frappe app
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../engineering-playbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engineering playbook — CR → build → release
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../methodology/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Methodology — why it's built this way
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../product-playbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product playbook — idea → BR / PRD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../publishing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Publishing the guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Frappe
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe reference skills
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe API skill
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe API skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#whitelisted-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Whitelisted methods
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Whitelisted methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#allow_guest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        allow_guest
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        methods=
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#type-hints-and-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type hints and validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rest-resource-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        REST resource API
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authentication
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Authentication">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#api-key-secret-preferred-for-server-to-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API Key + Secret (preferred for server-to-server)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#oauth-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OAuth 2.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#session-cookies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session cookies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#webhooks-incoming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Webhooks (incoming)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#webhooks-outgoing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Webhooks (outgoing)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rate-limiting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rate limiting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-responses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error responses
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#versioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Versioning
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-api-contract-parameter-names-matter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Public API contract — parameter names matter
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#external-calls-must-retry-glific-rabbitmq-anything-off-box" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        External calls must retry — Glific, RabbitMQ, anything off-box
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#glific-contact-fields-require-two-mutations-not-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Glific contact fields require TWO mutations, not one
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#audit-field-as-idempotency-anchor-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audit-field-as-idempotency-anchor pattern
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#good-api-hygiene" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Good API hygiene
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-api-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing API endpoints
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bench/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe bench skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../client-script/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe client script skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe controller skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../doctype/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe DocType skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe hooks.py skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../postgres/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe + PostgreSQL skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe testing skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#whitelisted-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Whitelisted methods
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Whitelisted methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#allow_guest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        allow_guest
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        methods=
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#type-hints-and-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type hints and validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rest-resource-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        REST resource API
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Authentication
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Authentication">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#api-key-secret-preferred-for-server-to-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        API Key + Secret (preferred for server-to-server)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#oauth-20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        OAuth 2.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#session-cookies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Session cookies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#webhooks-incoming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Webhooks (incoming)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#webhooks-outgoing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Webhooks (outgoing)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rate-limiting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rate limiting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-responses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error responses
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#versioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Versioning
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#public-api-contract-parameter-names-matter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Public API contract — parameter names matter
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#external-calls-must-retry-glific-rabbitmq-anything-off-box" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        External calls must retry — Glific, RabbitMQ, anything off-box
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#glific-contact-fields-require-two-mutations-not-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Glific contact fields require TWO mutations, not one
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#audit-field-as-idempotency-anchor-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audit-field-as-idempotency-anchor pattern
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#good-api-hygiene" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Good API hygiene
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-api-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing API endpoints
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="frappe-api-skill">Frappe API skill</h1>
+<blockquote>
+<p><strong>STOP — read this first if the endpoint is consumed by Glific:</strong>
+<code>docs/api-standard-glific.md</code> is the binding contract for every <code>@frappe.whitelist()</code> endpoint that Glific calls. It overrides Frappe defaults: NO <code>message</code> wrapper (use <code>frappe.local.response.update()</code>), flat scalars only, no arrays, <code>success</code> + <code>status</code> envelope, HTTP 200 even for business errors, snake_case ASCII keys. Read it end-to-end before writing or modifying the endpoint, and run the curl-test (Rule 10) before declaring done.</p>
+</blockquote>
+<p>Frappe ships three API surfaces:</p>
+<ol>
+<li><strong>Whitelisted methods</strong> — RPC-style. You decorate a Python function and it's reachable as <code>/api/method/&lt;dotted.path&gt;</code>. This is the workhorse.</li>
+<li><strong>REST resource API</strong> — auto-generated CRUD over DocTypes at <code>/api/resource/&lt;DocType&gt;</code>. Good for generic admin tools and simple integrations.</li>
+<li><strong>Web view / portal pages</strong> — <code>@frappe.whitelist(allow_guest=True)</code> plus a Jinja template, for public-facing endpoints.</li>
+</ol>
+<p>Pick #1 for almost everything custom; #2 only when you genuinely want generic CRUD; #3 for anonymous reads.</p>
+<h2 id="whitelisted-methods">Whitelisted methods</h2>
+<pre><code class="language-python"># app/tap_lms/api.py
+import frappe
+from frappe import _
+
+
+@frappe.whitelist()
+def enroll(student: str, course: str) -&gt; dict:
+    &quot;&quot;&quot;Enroll a student in a course. Idempotent.&quot;&quot;&quot;
+    if not frappe.db.exists(&quot;Student&quot;, student):
+        frappe.throw(_(&quot;Student {0} not found&quot;).format(student))
+    if not frappe.db.exists(&quot;Course&quot;, course):
+        frappe.throw(_(&quot;Course {0} not found&quot;).format(course))
+
+    existing = frappe.db.get_value(
+        &quot;Course Enrollment&quot;,
+        {&quot;student&quot;: student, &quot;course&quot;: course, &quot;status&quot;: &quot;Active&quot;},
+        &quot;name&quot;,
+    )
+    if existing:
+        return {&quot;enrollment&quot;: existing, &quot;created&quot;: False}
+
+    doc = frappe.get_doc({
+        &quot;doctype&quot;: &quot;Course Enrollment&quot;,
+        &quot;student&quot;: student,
+        &quot;course&quot;: course,
+        &quot;status&quot;: &quot;Active&quot;,
+    }).insert()
+    return {&quot;enrollment&quot;: doc.name, &quot;created&quot;: True}
+</code></pre>
+<p>Reachable at:</p>
+<pre><code>POST /api/method/tap_lms.api.enroll
+Content-Type: application/x-www-form-urlencoded
+student=STU-001&amp;course=CS101
+</code></pre>
+<p>Returned JSON wraps the value in <code>{"message": ...}</code>. Clients should read <code>response.message</code>.</p>
+<h3 id="allow_guest"><code>allow_guest</code></h3>
+<pre><code class="language-python">@frappe.whitelist(allow_guest=True)
+def public_course_list():
+    return frappe.get_all(&quot;Course&quot;, filters={&quot;is_published&quot;: 1}, fields=[&quot;name&quot;, &quot;title&quot;])
+</code></pre>
+<p>Without <code>allow_guest=True</code>, the method requires an authenticated session. Be deliberate; guest endpoints are the most common security hole.</p>
+<h3 id="methods"><code>methods=</code></h3>
+<pre><code class="language-python">@frappe.whitelist(methods=[&quot;POST&quot;])
+def submit_attempt(...): ...
+</code></pre>
+<p>Restrict HTTP verbs. Defaults to GET+POST. Use <code>methods=["POST"]</code> for state-changing endpoints so a CSRF-style accidental GET can't trigger a write.</p>
+<h3 id="type-hints-and-validation">Type hints and validation</h3>
+<p>Frappe doesn't currently coerce types from query strings — everything arrives as strings. Either coerce manually:</p>
+<pre><code class="language-python">@frappe.whitelist()
+def list_attempts(course: str, limit: int = 20) -&gt; list:
+    limit = int(limit)
+    ...
+</code></pre>
+<p>Or wrap with <code>pydantic</code> / <code>attrs</code> if your app already uses them.</p>
+<h2 id="rest-resource-api">REST resource API</h2>
+<p>Out of the box:</p>
+<ul>
+<li><code>GET /api/resource/Course</code> — list (respects user permissions)</li>
+<li><code>GET /api/resource/Course/CS101</code> — single doc</li>
+<li><code>POST /api/resource/Course</code> — create (body = JSON dict)</li>
+<li><code>PUT /api/resource/Course/CS101</code> — update</li>
+<li><code>DELETE /api/resource/Course/CS101</code> — delete</li>
+</ul>
+<p>Query params: <code>?fields=["name","title"]&amp;filters=[["is_published","=",1]]&amp;limit_page_length=50&amp;order_by=creation desc</code>.</p>
+<p>The resource API runs through the same permission system as the desk. A user/role without <code>read</code> on the DocType gets 403.</p>
+<h2 id="authentication">Authentication</h2>
+<h3 id="api-key-secret-preferred-for-server-to-server">API Key + Secret (preferred for server-to-server)</h3>
+<p>User sets up an API Key + API Secret under their User profile. Calling code sends:</p>
+<pre><code>Authorization: token &lt;api_key&gt;:&lt;api_secret&gt;
+</code></pre>
+<p>Generate programmatically:</p>
+<pre><code class="language-python">user = frappe.get_doc(&quot;User&quot;, &quot;integrations@tap.example&quot;)
+api_secret = frappe.generate_hash(length=15)
+user.api_key = frappe.generate_hash(length=15)
+user.api_secret = api_secret
+user.save(ignore_permissions=True)
+# Show api_secret to user once — it's hashed at rest.
+</code></pre>
+<h3 id="oauth-20">OAuth 2.0</h3>
+<p>Frappe is itself an OAuth provider — set up an <code>OAuth Client</code> record, then point a third-party client at <code>/api/method/frappe.integrations.oauth2.authorize</code>. Use this when a user is granting a foreign app access on their behalf. Skip for internal services; API keys are simpler.</p>
+<h3 id="session-cookies">Session cookies</h3>
+<p>For SPAs served from the same origin, the session cookie set by <code>/api/method/login</code> works fine. For cross-origin, you'll need to handle CORS (see <code>cors_domains</code> in <code>common_site_config.json</code>) and CSRF (Frappe sets <code>X-Frappe-CSRF-Token</code> for authenticated sessions; pass it back on writes).</p>
+<h2 id="webhooks-incoming">Webhooks (incoming)</h2>
+<p>Treat as untrusted input. Verify signatures:</p>
+<pre><code class="language-python">import hmac, hashlib
+
+@frappe.whitelist(allow_guest=True, methods=[&quot;POST&quot;])
+def receive_payment_webhook():
+    raw = frappe.request.get_data()
+    signature = frappe.request.headers.get(&quot;X-Webhook-Signature&quot;, &quot;&quot;)
+    expected = hmac.new(
+        frappe.conf.payment_webhook_secret.encode(),
+        raw,
+        hashlib.sha256,
+    ).hexdigest()
+    if not hmac.compare_digest(signature, expected):
+        frappe.throw(_(&quot;Bad signature&quot;), exc=frappe.AuthenticationError)
+
+    payload = frappe.parse_json(raw)
+    frappe.enqueue(
+        &quot;tap_lms.tap_lms.payments.handle_webhook&quot;,
+        payload=payload,
+        queue=&quot;short&quot;,
+    )
+    return {&quot;ok&quot;: True}
+</code></pre>
+<p>Always offload work to a queue — webhooks demand fast 200 responses.</p>
+<h2 id="webhooks-outgoing">Webhooks (outgoing)</h2>
+<p>Frappe has a built-in <code>Webhook</code> DocType: configure URL + headers + body template + trigger DocType + event. No code needed for most outgoing webhooks.</p>
+<h2 id="rate-limiting">Rate limiting</h2>
+<p>Frappe has a basic per-IP/per-user limiter (<code>enable_rate_limit</code> in site config). For richer needs, put nginx in front and rate-limit there, or wrap the method with a custom decorator that reads/writes a Redis counter via <code>frappe.cache()</code>.</p>
+<h2 id="error-responses">Error responses</h2>
+<p><code>frappe.throw(_("..."))</code> produces a 417 with the message. For RESTful 400/404/403 codes:</p>
+<pre><code class="language-python">import frappe
+from werkzeug.exceptions import NotFound, BadRequest
+
+@frappe.whitelist()
+def get_course(name):
+    if not frappe.db.exists(&quot;Course&quot;, name):
+        raise NotFound(f&quot;Course {name} not found&quot;)
+    return frappe.get_doc(&quot;Course&quot;, name).as_dict()
+</code></pre>
+<h2 id="versioning">Versioning</h2>
+<p>Frappe doesn't version <code>/api/method</code> paths. If your API has external consumers, version it yourself by namespace:</p>
+<pre><code>/api/method/tap_lms.api.v1.enroll
+/api/method/tap_lms.api.v2.enroll
+</code></pre>
+<p>Don't break v1 once published.</p>
+<h2 id="public-api-contract-parameter-names-matter">Public API contract — parameter names matter</h2>
+<p>On TAP LMS, <strong>whitelisted method parameter names are public contract</strong>. Glific flows reference them directly (and contact-field names too — lesson L-008). Renaming <code>content_id</code> → <code>assignment_id</code> without an alias silently breaks every Glific flow node that calls the API. This has bitten us twice (CR-2026-05-10 #H2).</p>
+<p>Always add a backward-compat alias for at least one release cycle, and log a deprecation warning when the old name is used. Pattern P-006:</p>
+<pre><code class="language-python">@frappe.whitelist()
+def save_submission(student_id, assignment_id=None, content_id=None, **kwargs):
+    if assignment_id is None and content_id is not None:
+        assignment_id = content_id
+        frappe.log_error(
+            &quot;Deprecated: save_submission called with content_id; &quot;
+            &quot;rename to assignment_id&quot;,
+            &quot;API deprecation&quot;,
+        )
+    if assignment_id is None:
+        frappe.throw(_(&quot;assignment_id is required&quot;))
+    ...
+</code></pre>
+<p>Lesson L-009. Code-reviewer flags every rename without an alias as <strong>HIGH</strong> severity.</p>
+<h2 id="external-calls-must-retry-glific-rabbitmq-anything-off-box">External calls must retry — Glific, RabbitMQ, anything off-box</h2>
+<p>Calls to Glific (<code>update_contact_fields</code>, <code>start_contact_flow</code>) and RabbitMQ publishes from inside whitelisted methods need retry + dead-letter behaviour. The state has already committed in PG by the time the external call runs; a silent failure leaves Glific cache stale or submissions lost (CR-2026-05-10 #H3, #H4).</p>
+<p>Use <code>frappe.enqueue</code> with <code>retry=N</code> rather than calling the external service inline:</p>
+<pre><code class="language-python">def _sync_contact_fields(pe):
+    try:
+        update_contact_fields(pe.glific_id, build_field_dict(pe))
+    except Exception as e:
+        frappe.log_error(
+            f&quot;Glific sync failed for {pe.glific_id}: {e}&quot;,
+            &quot;Glific sync&quot;,
+        )
+        frappe.enqueue(
+            &quot;tap_lms.summer_program.glific_extensions.retry_contact_fields&quot;,
+            queue=&quot;short&quot;, retry=3,
+            pe_name=pe.name,
+        )
+</code></pre>
+<p>Lesson L-015, pattern P-007.</p>
+<h2 id="glific-contact-fields-require-two-mutations-not-one">Glific contact fields require TWO mutations, not one</h2>
+<p><code>updateContact</code> (the mutation we used for years) writes a value into the contact's <code>fields</code> JSON column but does <strong>not</strong> register the field's DEFINITION. Without a definition row in Glific's <code>contacts_fields</code> table, the field is invisible to the Flow Editor: no dropdown entry, <code>@contact.fields.&lt;shortcode&gt;</code> renders as literal text, and webhook query params can't surface it. Confirmed by Glific support 2026-05-26.</p>
+<p><strong>3-step protocol when adding any new contact field:</strong></p>
+<ol>
+<li>Add the <code>CF_X = "shortcode"</code> constant in <code>summer_program/constants.py</code>.</li>
+<li>Add it to every push payload that should carry the field:</li>
+<li><code>state_machine._enqueue_contact_field_sync</code> (recurring per-transition sync)</li>
+<li><code>program_enrollment_api._process_pe_chunk</code> and <code>process_glific_contact</code> (enrollment-time push)</li>
+<li><code>dev_tools.reconcile_pe_to_glific</code> (operator-driven reconcile)</li>
+<li>Add <code>(shortcode, "Display Name")</code> to <code>SP_CONTACT_FIELD_DEFINITIONS</code> in <code>dev_tools.py</code> <strong>AND re-run <code>dev_tools.bootstrap_sp_contact_fields()</code> on every Glific org</strong> (dev, prod). The helper is idempotent — already-registered fields return "shortcode already taken" which we treat as success.</li>
+</ol>
+<p>Skipping step 3 means the value lands in the JSON cache (visible in the contact profile) but flow templates render <code>@contact.fields.X</code> as literal text.</p>
+<p><strong>Multi-tenant Glific boundary.</strong> Several programs share the same Glific organization (TLM, scert, pocflow, plus SP). Legacy keys like <code>streak</code>, <code>gems</code>, <code>bonus_points</code>, <code>current_activity_points</code> are owned by <em>other programs</em> — the SP backend <strong>must not</strong> write to them. The SP namespace is exactly the 29-30 fields registered by <code>bootstrap_sp_contact_fields()</code>. Writing outside that namespace silently clobbers data other programs depend on. Lesson L-053.</p>
+<h2 id="audit-field-as-idempotency-anchor-pattern">Audit-field-as-idempotency-anchor pattern</h2>
+<p>When the same logical write can be produced by multiple writers (sync API + async worker; in-request handler + scheduled cron), an audit column on the row coordinates them without locking. Pre-fill the field at the upstream-write site; downstream hooks gate on the field to skip:</p>
+<pre><code class="language-python"># In-request handler awards points and pre-fills the audit field
+@frappe.whitelist()
+def complete_content(student_id, content_id, ...):
+    pts = award_points_now(student_id, content_id)
+    frappe.enqueue(
+        &quot;tap_lms.summer_program.background_jobs.job_log_content_completion&quot;,
+        queue=&quot;short&quot;,
+        student_id=student_id,
+        content_id=content_id,
+        points_awarded=pts,   # ← carry the already-awarded amount
+        ...
+    )
+
+# Worker creates the audit row with points_awarded ALREADY SET
+def job_log_content_completion(student_id, content_id, points_awarded=None, ...):
+    log = frappe.get_doc({
+        &quot;doctype&quot;: &quot;StudentContentLog&quot;,
+        ...,
+        &quot;points_awarded&quot;: cint(points_awarded) if points_awarded is not None else 0,
+    })
+    log.insert(ignore_permissions=True)
+
+# after_insert hook reads the gate field and skips if upstream awarded
+def handle_content_log(scl, method=None):
+    if (scl.points_awarded or 0) &gt; 0:
+        return   # already awarded by upstream caller; nothing to do
+    award_points(scl)
+</code></pre>
+<p>The pattern is pattern P-010 (proposed; full form expanded from P-005 "idempotency anchor written first"). Used correctly, it eliminates the need for cross-process locks for write-once audit data.</p>
+<h2 id="good-api-hygiene">Good API hygiene</h2>
+<ul>
+<li>Return predictable shapes. Don't return a Document one call and a dict the next.</li>
+<li>Document each endpoint with a docstring; <code>bench</code> generates docs from them.</li>
+<li>Use <code>frappe.has_permission(doctype, ptype, doc=name)</code> to check permissions explicitly when bypassing default checks.</li>
+<li>Log unusual conditions via <code>frappe.log_error(message, title)</code>. They land in the Error Log DocType and are filterable.</li>
+</ul>
+<h2 id="testing-api-endpoints">Testing API endpoints</h2>
+<p><code>bench --site &lt;site&gt; execute tap_lms.api.enroll --kwargs '{"student": "STU-001", "course": "CS101"}'</code> runs a method with the desired session. Combine with <code>bench console</code> for ad-hoc poking.</p>
+<p>For automated tests, see the <code>frappe-test</code> skill — Frappe's test runner sets up an authenticated context so you can call whitelisted methods directly.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

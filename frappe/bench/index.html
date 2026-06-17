@@ -1,0 +1,2017 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Run, configure, or troubleshoot the Frappe `bench` CLI. Trigger whenever the user mentions bench commands, creating a new site, installing an app, migrating, restarting workers, building assets, switching branches, restoring backups, or any operational task on a Frappe deployment. Also use when the user reports issues like "site not loading", "scheduler not running", or "after I edited X nothing changed" — those are usually bench/cache/restart issues.">
+      
+      
+      
+      
+        <link rel="prev" href="../api/">
+      
+      
+        <link rel="next" href="../client-script/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Frappe bench skill - claude-cowork-code — Team Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#frappe-bench-skill" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="claude-cowork-code — Team Guide" class="md-header__button md-logo" aria-label="claude-cowork-code — Team Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            claude-cowork-code — Team Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Frappe bench skill
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="claude-cowork-code — Team Guide" class="md-nav__button md-logo" aria-label="claude-cowork-code — Team Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    claude-cowork-code — Team Guide
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to use claude-cowork-code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adopt-for-new-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adopt it for a new project
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adopt-frappe-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adopt it for a new Frappe app
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../engineering-playbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engineering playbook — CR → build → release
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../methodology/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Methodology — why it's built this way
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../product-playbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product playbook — idea → BR / PRD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../publishing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Publishing the guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Frappe
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe reference skills
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe API skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe bench skill
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe bench skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layout
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#first-time-setup-postgres" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First-time setup (Postgres)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#day-to-day-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day-to-day commands
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Day-to-day commands">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#migration-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migration &amp; schema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#app-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        App lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-assets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build &amp; assets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#restart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restart
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backups
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#console-ad-hoc-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Console &amp; ad-hoc execution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workers-scheduler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workers &amp; scheduler
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#switching-frappe-versions-branches" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Switching Frappe versions / branches
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#detecting-the-current-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Detecting the current version
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-operational-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common operational issues
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#production-knobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Production knobs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-short-cheat-sheet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A short cheat sheet
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#console-use-sp_console-instead-of-pasted-snippets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Console — use sp_console instead of pasted snippets
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Console — use sp_console instead of pasted snippets">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setup-one-time-per-bench-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setup (one-time per bench server)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usage-in-bench-console" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage in bench console
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-to-update-this-skill-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to update this skill file
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-helper-module-copy-this-entire-block-to-sp_consolepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The helper module — copy this entire block to ~/sp_console.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../client-script/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe client script skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe controller skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../doctype/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe DocType skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe hooks.py skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../postgres/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe + PostgreSQL skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe testing skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layout
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#first-time-setup-postgres" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First-time setup (Postgres)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#day-to-day-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Day-to-day commands
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Day-to-day commands">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#migration-schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migration &amp; schema
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#app-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        App lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-assets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build &amp; assets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#restart" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Restart
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backups
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#console-ad-hoc-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Console &amp; ad-hoc execution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workers-scheduler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workers &amp; scheduler
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#switching-frappe-versions-branches" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Switching Frappe versions / branches
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#detecting-the-current-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Detecting the current version
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-operational-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common operational issues
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#production-knobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Production knobs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-short-cheat-sheet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A short cheat sheet
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#console-use-sp_console-instead-of-pasted-snippets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Console — use sp_console instead of pasted snippets
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Console — use sp_console instead of pasted snippets">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setup-one-time-per-bench-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setup (one-time per bench server)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usage-in-bench-console" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage in bench console
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-to-update-this-skill-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to update this skill file
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-helper-module-copy-this-entire-block-to-sp_consolepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The helper module — copy this entire block to ~/sp_console.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="frappe-bench-skill">Frappe bench skill</h1>
+<blockquote>
+<p><strong>Launch context:</strong> project root. For bench commands, <code>cd ~/frappe-bench</code> first.</p>
+</blockquote>
+<p><code>bench</code> is a CLI wrapper around Frappe that orchestrates: per-site DBs, app installation, migrations, asset builds, workers, scheduler, and backups. The cardinal rule is: most "did my change take effect?" mysteries are solved by <code>bench restart</code> and <code>bench --site &lt;site&gt; clear-cache</code>.</p>
+<h2 id="layout">Layout</h2>
+<p>A bench is a directory with this structure:</p>
+<pre><code>frappe-bench/
+├── apps/
+│   ├── frappe/
+│   ├── erpnext/
+│   └── tap_lms/        ← your custom app
+├── sites/
+│   ├── apps.txt
+│   ├── common_site_config.json
+│   └── &lt;sitename&gt;/
+│       ├── site_config.json
+│       ├── public/
+│       └── private/
+├── env/                # Python virtualenv
+└── config/             # nginx, supervisor, redis configs
+</code></pre>
+<p><code>apps/&lt;app&gt;</code> is a normal git repo — work there exactly like any other Python package.</p>
+<h2 id="first-time-setup-postgres">First-time setup (Postgres)</h2>
+<pre><code class="language-bash"># Install bench CLI
+pip install frappe-bench
+
+# Init a bench tracking v15
+bench init --frappe-branch version-15 frappe-bench
+
+cd frappe-bench
+
+# Tell bench to use Postgres for new sites
+bench set-config -g db_type postgres
+bench set-config -g db_host 127.0.0.1
+bench set-config -g db_port 5432
+
+# Create a new site backed by Postgres
+bench new-site tap.local \
+    --db-type postgres \
+    --db-host 127.0.0.1 \
+    --db-root-username postgres \
+    --admin-password admin
+
+# Get your custom app
+bench get-app tap_lms &lt;git-url-or-local-path&gt;
+bench --site tap.local install-app tap_lms
+
+# Start the dev server (web + scheduler + workers + watcher)
+bench start
+</code></pre>
+<h2 id="day-to-day-commands">Day-to-day commands</h2>
+<p>Every site-scoped command takes <code>--site &lt;name&gt;</code> (or set a default with <code>bench use &lt;site&gt;</code>).</p>
+<h3 id="migration-schema">Migration &amp; schema</h3>
+<pre><code class="language-bash">bench --site tap.local migrate          # Apply DocType JSON changes + run patches
+bench --site tap.local reload-doctype &quot;Course Enrollment&quot;  # Re-read one DocType from disk
+bench --site tap.local clear-cache      # Wipe metadata + Redis caches
+bench --site tap.local clear-website-cache
+</code></pre>
+<p><code>migrate</code> is the one you'll run constantly. If a migration fails midway, fix the cause and re-run; patches that already ran are skipped (tracked in <code>tabPatch Log</code>).</p>
+<h3 id="app-lifecycle">App lifecycle</h3>
+<pre><code class="language-bash">bench new-app tap_lms                   # Scaffold a new app
+bench --site tap.local install-app tap_lms
+bench --site tap.local uninstall-app tap_lms
+bench --site tap.local list-apps
+</code></pre>
+<h3 id="build-assets">Build &amp; assets</h3>
+<pre><code class="language-bash">bench build                  # Build all apps' JS/CSS bundles
+bench build --app tap_lms    # Just yours
+bench watch                  # Live rebuild on change (dev)
+</code></pre>
+<p>After editing <code>.bundle.js</code> files or anything in <code>public/</code>, run <code>bench build</code> (or have <code>bench start</code> running, which calls <code>watch</code>).</p>
+<h3 id="restart">Restart</h3>
+<pre><code class="language-bash">bench restart                # Reload web workers + queue workers + scheduler
+bench restart --supervisor   # Production: restart via supervisorctl
+</code></pre>
+<p>Restart whenever you change <code>hooks.py</code>, install/uninstall an app, or change Python code that's imported at startup. Lifecycle methods inside DocType controllers don't need a restart (they're imported per request).</p>
+<h3 id="backups">Backups</h3>
+<pre><code class="language-bash">bench --site tap.local backup                    # SQL only
+bench --site tap.local backup --with-files       # SQL + private/public files
+bench --site tap.local backup --compress
+ls sites/tap.local/private/backups/              # ← they land here
+</code></pre>
+<p>Restore:</p>
+<pre><code class="language-bash">bench --site tap.local restore &lt;path/to/backup.sql.gz&gt; \
+    --with-public-files &lt;path/to/files.tar&gt; \
+    --with-private-files &lt;path/to/private.tar&gt;
+</code></pre>
+<p>For Postgres, the backups are produced by <code>pg_dump</code>; restore uses <code>pg_restore</code> under the hood.</p>
+<h3 id="console-ad-hoc-execution">Console &amp; ad-hoc execution</h3>
+<pre><code class="language-bash">bench --site tap.local console
+# Drops into IPython with `frappe` already imported and the site context loaded.
+
+bench --site tap.local execute tap_lms.api.enroll --kwargs '{&quot;student&quot;: &quot;STU-001&quot;, &quot;course&quot;: &quot;CS101&quot;}'
+# Run any function with the site context — great for one-off scripts.
+
+bench --site tap.local run-tests --app tap_lms
+</code></pre>
+<h3 id="workers-scheduler">Workers &amp; scheduler</h3>
+<pre><code class="language-bash">bench worker --queue default,short,long   # one worker per queue family
+bench schedule                            # the scheduler daemon
+</code></pre>
+<p>In production these are managed by supervisor (<code>config/supervisor.conf</code> is generated by <code>bench setup supervisor</code>). In dev, <code>bench start</code> runs them all under honcho.</p>
+<h2 id="switching-frappe-versions-branches">Switching Frappe versions / branches</h2>
+<pre><code class="language-bash">cd apps/frappe
+git checkout version-15    # or whichever
+cd ../..
+bench setup requirements    # reinstall Python deps
+bench --site tap.local migrate
+bench build
+bench restart
+</code></pre>
+<p>Same pattern for any app: checkout the branch in <code>apps/&lt;app&gt;</code>, run <code>setup requirements</code>, migrate, build, restart.</p>
+<h2 id="detecting-the-current-version">Detecting the current version</h2>
+<pre><code class="language-bash">bench version                              # versions of all apps
+bench --site tap.local version             # same, plus site DB schema version
+cat apps/frappe/frappe/__init__.py | grep &quot;^__version__&quot;
+</code></pre>
+<h2 id="common-operational-issues">Common operational issues</h2>
+<p><strong>"My JS changes don't show up"</strong> — Browser cache, then <code>bench build</code>, then <code>bench --site &lt;site&gt; clear-cache</code>, in that order.</p>
+<p><strong>"My new doc_event doesn't fire"</strong> — <code>hooks.py</code> change without <code>bench restart</code>. Restart and retry.</p>
+<p><strong>"Scheduler isn't running my hourly job"</strong> — In dev, <code>bench start</code> must be running. In prod, supervisor must be up and <code>enabled_scheduler_events</code> in site config must include the relevant frequency. Check <code>tabScheduled Job Log</code> for evidence the scheduler is alive.</p>
+<p><strong>"I added a new entry to <code>scheduler_events.cron</code> in <code>hooks.py</code>, ran <code>bench restart</code>, and it never fires"</strong> — Restart reloads code but does NOT re-sync <code>scheduler_events</code> into the DB. Frappe stores scheduler entries in the <code>tabScheduled Job Type</code> table; that table is populated from <code>hooks.py</code> only by <code>bench --site &lt;site&gt; migrate</code>. <strong>Rule: after editing <code>scheduler_events</code>, run <code>bench --site &lt;site&gt; migrate</code> AND <code>bench restart</code>.</strong> Editing <code>doc_events</code> only requires restart. Verify by querying <code>tabScheduled Job Type WHERE method LIKE '&lt;your_module&gt;%'</code> after migrate.</p>
+<p><strong>"My RQ background job runs but no data appears (silent success)"</strong> — The job's outer <code>except</code> swallows exceptions without re-raising. RQ marks the job "finished" because no exception propagated, but the work the job was supposed to do never landed. <strong>Rule: every RQ job's outer <code>except</code> branch must end with <code>raise</code> (after any <code>frappe.db.rollback()</code> + <code>frappe.log_error</code>).</strong> Check <code>FailedJobRegistry</code> to see if your jobs are actually failing: in bench console, <code>from tap_lms.summer_program.sp_console import queue_failures_for; queue_failures_for("&lt;func_name&gt;")</code>.</p>
+<p><strong>"Site won't load: connection refused"</strong> — Postgres or Redis isn't running. <code>pg_isready -h 127.0.0.1 -p 5432</code>, <code>redis-cli ping</code>.</p>
+<p><strong>"<code>bench migrate</code> fails with permission denied"</strong> — The Postgres user lacks <code>CREATE</code> on the DB. Either grant it (<code>GRANT ALL ON DATABASE &lt;db&gt; TO &lt;user&gt;</code>) or run migrate as a privileged user once.</p>
+<p><strong>"Out of memory during build"</strong> — <code>bench build</code> runs node/esbuild and can be hungry. On small servers, <code>NODE_OPTIONS=--max-old-space-size=2048 bench build</code>.</p>
+<h2 id="production-knobs">Production knobs</h2>
+<p><code>bench setup production &lt;user&gt;</code> writes nginx + supervisor configs. After:</p>
+<pre><code class="language-bash">sudo supervisorctl reread &amp;&amp; sudo supervisorctl update
+sudo nginx -s reload
+</code></pre>
+<p><code>bench setup nginx</code> regenerates nginx config (run after adding a site or changing SSL). <code>bench setup supervisor</code> regenerates worker configs (run after changing worker counts in <code>common_site_config.json</code>).</p>
+<p>For Postgres specifically, ensure <code>pg_hba.conf</code> allows the bench user from <code>127.0.0.1</code> (<code>host &lt;db&gt; &lt;user&gt; 127.0.0.1/32 md5</code>) and <code>max_connections</code> is high enough — calculate <code>(workers × queues) + gunicorn workers + a buffer</code> and add 20%.</p>
+<h2 id="a-short-cheat-sheet">A short cheat sheet</h2>
+<pre><code class="language-bash">bench --site tap.local migrate                 # after a DocType JSON or hooks.scheduler_events change
+bench restart                                   # after a hooks.py doc_events / Python import-time change
+bench --site tap.local clear-cache              # after metadata weirdness
+bench build                                     # after JS / CSS / .bundle changes
+bench --site tap.local console                  # poke around live data
+bench --site tap.local backup --with-files      # before doing anything risky
+bench --site tap.local run-tests --app tap_lms  # before pushing
+</code></pre>
+<p>If you can't remember which one you need, run all five (in order) — they're idempotent and the whole sequence takes well under a minute on a small site.</p>
+<h2 id="console-use-sp_console-instead-of-pasted-snippets">Console — use <code>sp_console</code> instead of pasted snippets</h2>
+<p>Bench console is IPython under the hood. Two failure modes hit repeatedly when pasting raw diagnostic snippets:</p>
+<ol>
+<li><strong>Generator/closure-scope NameError.</strong> A <code>def</code> or genexp inside a multiline cell sometimes fails to capture imports declared in the same cell. Workarounds (split into separate cells; inline everything) are fragile.</li>
+<li><strong>Placeholder-syntax SyntaxError.</strong> Snippets with placeholders like <code>[...names from above...]</code> parse as invalid Python before any comment is read.</li>
+</ol>
+<p><strong>The fix is to call functions, not paste cells.</strong> Save the helper code below to a personal file on the bench server (the team convention is <code>~/sp_console.py</code>), then load it into your console session.</p>
+<p>These helpers are <strong>developer tooling only — NOT part of the shipped <code>tap_lms</code> app</strong>. They live in this skill file as a copy-paste reference (one canonical version everyone shares) rather than in <code>app/tap_lms/</code> because they don't belong in production code paths.</p>
+<h3 id="setup-one-time-per-bench-server">Setup (one-time per bench server)</h3>
+<pre><code class="language-bash"># On the bench server, save the helper code below to ~/sp_console.py
+# (the file lives outside the bench checkout, so it's not in git and
+#  not shipped with the app).
+vim ~/sp_console.py
+</code></pre>
+<h3 id="usage-in-bench-console">Usage in bench console</h3>
+<pre><code class="language-python"># Load the helpers once per console session
+exec(open(&quot;/home/&lt;your-user&gt;/sp_console.py&quot;).read())
+
+# Now the functions are available
+pe_health(&quot;ST00051246&quot;)                           # PE / Glific / API 3-way comparison
+pe_events(&quot;ST00051246&quot;, limit=20)                 # last N ProgramEventLog entries
+cohort_drift(&quot;palv2-test-BT52231&quot;)                # read-only cohort sweep
+cohort_status_breakdown(&quot;palv2-test-BT52231&quot;)     # status × resolved_flow_state counts
+collection_diff(&quot;palv2-test-BT52231&quot;, main_group_id=&quot;20529&quot;)  # MAIN_ELIGIBLE_STATES-aware
+enqueue_health()                                  # Redis + queues + workers + smoke test + recents
+queue_failures_for(&quot;job_log_content_completion&quot;)  # see if a function has historical failures
+scheduled_crons()                                 # verify bench migrate registered new entries
+glific_fields(&quot;306187&quot;)                           # pretty-print SP-managed contact fields
+</code></pre>
+<h3 id="when-to-update-this-skill-file">When to update this skill file</h3>
+<p>When you write a new diagnostic during a session, save it BOTH to your local <code>~/sp_console.py</code> AND propose appending the function to this skill file via PR. The skill file is the canonical version; local files are working copies that should match.</p>
+<p>Conventions:
+- Top-level <code>def</code> (no closures over imports declared in console).
+- First line is <code>frappe.db.rollback()</code> (clears any poisoned txn from a prior cell).
+- Accept explicit string args, not in-cell mutable references.
+- Return a dict; gate the print output on <code>verbose=True</code>.
+- Read-only by default; prefix mutating functions with <code>repair_</code>.</p>
+<h3 id="the-helper-module-copy-this-entire-block-to-sp_consolepy">The helper module — copy this entire block to <code>~/sp_console.py</code></h3>
+<pre><code class="language-python"># -*- coding: utf-8 -*-
+# Developer console toolkit. NOT part of the shipped tap_lms app.
+# Canonical version lives in skills/frappe-bench/SKILL.md.
+# Save this file at ~/sp_console.py on the bench server; load with
+#   exec(open(&quot;/home/&lt;user&gt;/sp_console.py&quot;).read())
+# inside `bench --site &lt;site&gt; console`.
+
+import json
+import time
+from typing import Any, Dict, List, Optional
+
+import frappe
+import requests
+from frappe.utils import now_datetime
+
+
+# ── PE / student state inspection ───────────────────────────────
+
+def pe_health(student_id: str, verbose: bool = True) -&gt; Dict[str, Any]:
+    &quot;&quot;&quot;3-way comparison: PE row / Glific contact / get_student_state API.&quot;&quot;&quot;
+    frappe.db.rollback()
+
+    pe_row = frappe.db.sql(
+        &quot;&quot;&quot;
+        SELECT name, glific_id, program_status, current_week, current_path,
+               current_tier, resolved_flow_state, journey_label,
+               total_points, current_streak, special_gems,
+               total_activity_points, weekly_activity_points,
+               total_quiz_points, weekly_quiz_points, bonus_quiz_points,
+               total_submission_points, weekly_submission_points,
+               weekly_submission_done, weekly_video_done,
+               current_escalation_step, current_escalation_type,
+               in_grace_window, grace_window_end_at,
+               next_action_at, next_action_type
+          FROM &quot;tabProgramEnrollment&quot;
+         WHERE student = %s AND program_status IN ('active', 'paused')
+         ORDER BY modified DESC LIMIT 1
+        &quot;&quot;&quot;,
+        (student_id,), as_dict=True,
+    )
+    if not pe_row:
+        if verbose:
+            print(f&quot;no active/paused PE for {student_id}&quot;)
+        return {&quot;pe&quot;: None, &quot;glific&quot;: None, &quot;api&quot;: None, &quot;drift&quot;: []}
+    pe = pe_row[0]
+
+    glific = _fetch_glific_contact(pe[&quot;glific_id&quot;]) if pe.get(&quot;glific_id&quot;) else {}
+    api = _call_get_student_state(student_id)
+
+    drift = []
+    pairs = [
+        (&quot;resolved_flow_state&quot;, &quot;resolved_flow_state&quot;),
+        (&quot;current_week&quot;, &quot;current_week&quot;),
+        (&quot;current_streak&quot;, &quot;current_streak&quot;),
+        (&quot;special_gems&quot;, &quot;special_gems&quot;),
+        (&quot;total_points&quot;, &quot;total_points&quot;),
+        (&quot;total_quiz_points&quot;, &quot;total_quiz_points&quot;),
+        (&quot;bonus_quiz_points&quot;, &quot;bonus_quiz_points&quot;),
+        (&quot;weekly_quiz_points&quot;, &quot;weekly_quiz_points&quot;),
+        (&quot;weekly_activity_points&quot;, &quot;weekly_activity_points&quot;),
+        (&quot;weekly_submission_points&quot;, &quot;weekly_submission_points&quot;),
+        (&quot;escalation_type&quot;, &quot;current_escalation_type&quot;),
+    ]
+    for glific_key, pe_key in pairs:
+        pe_val = pe.get(pe_key)
+        glific_val = glific.get(glific_key)
+        if glific_val is None:
+            continue
+        if str(pe_val) != str(glific_val):
+            drift.append({&quot;key&quot;: glific_key, &quot;pe&quot;: pe_val, &quot;glific&quot;: glific_val})
+
+    if verbose:
+        print(f&quot;\nPE.{pe['name']}  student={student_id}  status={pe['program_status']}&quot;)
+        print(f&quot;  state={pe['resolved_flow_state']}  week={pe['current_week']}  &quot;
+              f&quot;tier={pe['current_tier']}  path={pe['current_path']}&quot;)
+        print(f&quot;  total={pe['total_points']}  streak={pe['current_streak']}  &quot;
+              f&quot;gems={pe['special_gems']}  bonus={pe['bonus_quiz_points']}&quot;)
+        print(f&quot;  weekly: video={pe['weekly_video_done']} &quot;
+              f&quot;submission={pe['weekly_submission_done']} &quot;
+              f&quot;q={pe['weekly_quiz_points']} a={pe['weekly_activity_points']} &quot;
+              f&quot;s={pe['weekly_submission_points']}&quot;)
+        if pe['current_escalation_step']:
+            print(f&quot;  escalation step={pe['current_escalation_step']} &quot;
+                  f&quot;type={pe['current_escalation_type']}&quot;)
+        if pe['next_action_type']:
+            print(f&quot;  next: {pe['next_action_type']} at {pe['next_action_at']}&quot;)
+        print(f&quot;\ndrift items ({len(drift)}):&quot;)
+        for d in drift:
+            print(f&quot;  {d['key']:30s} PE={d['pe']!r:15s} Glific={d['glific']!r}&quot;)
+
+    return {&quot;pe&quot;: pe, &quot;glific&quot;: glific, &quot;api&quot;: api, &quot;drift&quot;: drift}
+
+
+def pe_events(student_id_or_pe: str, limit: int = 20,
+              verbose: bool = True) -&gt; List[Dict[str, Any]]:
+    &quot;&quot;&quot;Last N ProgramEventLog rows. FK column is `enrollment` (L-052).&quot;&quot;&quot;
+    frappe.db.rollback()
+
+    if student_id_or_pe.startswith(&quot;ST&quot;):
+        pe_name = frappe.db.get_value(
+            &quot;ProgramEnrollment&quot;,
+            {&quot;student&quot;: student_id_or_pe,
+             &quot;program_status&quot;: [&quot;in&quot;, [&quot;active&quot;, &quot;paused&quot;]]},
+            &quot;name&quot;, order_by=&quot;modified desc&quot;,
+        )
+    else:
+        pe_name = student_id_or_pe
+
+    if not pe_name:
+        if verbose:
+            print(f&quot;no PE found for {student_id_or_pe}&quot;)
+        return []
+
+    rows = frappe.db.sql(
+        &quot;&quot;&quot;
+        SELECT creation, event_type, trigger_source,
+               old_value, new_value,
+               LEFT(details::text, 200) AS details
+          FROM &quot;tabProgramEventLog&quot;
+         WHERE enrollment = %s
+         ORDER BY creation DESC LIMIT %s
+        &quot;&quot;&quot;,
+        (pe_name, limit), as_dict=True,
+    )
+    if verbose:
+        print(f&quot;\nLast {len(rows)} events for PE {pe_name}:&quot;)
+        for r in rows:
+            print(f&quot;  {r['creation']}  {r['event_type']:30s}  &quot;
+                  f&quot;src={r['trigger_source']!r:14s}  &quot;
+                  f&quot;{r['old_value']!r} → {r['new_value']!r}&quot;)
+    return rows
+
+
+# ── Cohort-wide diagnostics ─────────────────────────────────────
+
+def cohort_drift(batch_name: str, verbose: bool = True) -&gt; Dict[str, Any]:
+    &quot;&quot;&quot;Read-only cohort sweep via dev_tools.reconcile_batch_to_glific(dry_run=True).&quot;&quot;&quot;
+    frappe.db.rollback()
+    from tap_lms.summer_program import dev_tools
+    return dev_tools.reconcile_batch_to_glific(
+        batch_name, dry_run=True, verbose=verbose,
+    )
+
+
+def cohort_status_breakdown(batch_name: str,
+                            verbose: bool = True) -&gt; List[Dict[str, Any]]:
+    &quot;&quot;&quot;PE counts grouped by (program_status, resolved_flow_state).&quot;&quot;&quot;
+    frappe.db.rollback()
+    rows = frappe.db.sql(
+        &quot;&quot;&quot;
+        SELECT program_status, resolved_flow_state, COUNT(*) AS n
+          FROM &quot;tabProgramEnrollment&quot;
+         WHERE batch = %s
+         GROUP BY program_status, resolved_flow_state
+         ORDER BY n DESC
+        &quot;&quot;&quot;,
+        (batch_name,), as_dict=True,
+    )
+    if verbose:
+        print(f&quot;\nPE breakdown for {batch_name}:&quot;)
+        for r in rows:
+            print(f&quot;  {r['program_status']:12s} &quot;
+                  f&quot;{r['resolved_flow_state'] or '-':30s}  {r['n']}&quot;)
+    return rows
+
+
+def collection_diff(batch_name: str, main_group_id: str,
+                    verbose: bool = True) -&gt; Dict[str, Any]:
+    &quot;&quot;&quot;Filter PEs by MAIN_ELIGIBLE_STATES (CR-005) before diffing against
+    the Glific group. grace_waiting / escalation / paused are excluded
+    by design, not 'missing' (L-055).&quot;&quot;&quot;
+    frappe.db.rollback()
+    from tap_lms.summer_program.collection_membership import MAIN_ELIGIBLE_STATES
+    from tap_lms.glific_integration import (
+        get_glific_settings, get_glific_auth_headers,
+    )
+
+    pes = frappe.db.sql(
+        &quot;&quot;&quot;
+        SELECT pe.name, pe.student, pe.glific_id,
+               pe.program_status, pe.resolved_flow_state
+          FROM &quot;tabProgramEnrollment&quot; pe
+         WHERE pe.batch = %s
+           AND pe.program_status IN ('active', 'paused')
+        &quot;&quot;&quot;,
+        (batch_name,), as_dict=True,
+    )
+    eligible_by_gid = {}
+    for p in pes:
+        if p[&quot;glific_id&quot;] and p[&quot;resolved_flow_state&quot;] in MAIN_ELIGIBLE_STATES:
+            eligible_by_gid[str(p[&quot;glific_id&quot;])] = p
+    eligible_gids = set(eligible_by_gid.keys())
+
+    settings = get_glific_settings()
+    r = requests.post(
+        f&quot;{settings.api_url}/api&quot;,
+        json={
+            &quot;query&quot;: &quot;query g($id: ID!){group(id:$id){group{id contacts{id phone}}}}&quot;,
+            &quot;variables&quot;: {&quot;id&quot;: str(main_group_id)},
+        },
+        headers=get_glific_auth_headers(), timeout=30,
+    ).json()
+    contacts = (((r.get(&quot;data&quot;) or {}).get(&quot;group&quot;) or {}).get(&quot;group&quot;) or {}).get(&quot;contacts&quot;) or []
+    collection_gids = {str(c.get(&quot;id&quot;)) for c in contacts}
+
+    missing = eligible_gids - collection_gids
+    extra = collection_gids - eligible_gids
+
+    if verbose:
+        print(f&quot;\nEligible for main collection: {len(eligible_gids)}&quot;)
+        print(f&quot;Collection members on Glific:  {len(collection_gids)}&quot;)
+        print(f&quot;\nMissing from collection ({len(missing)}):&quot;)
+        for gid in missing:
+            p = eligible_by_gid[gid]
+            print(f&quot;  {p['name']}  student={p['student']}  gid={gid}  &quot;
+                  f&quot;state={p['resolved_flow_state']}&quot;)
+        print(f&quot;\nExtra in collection ({len(extra)}):&quot;)
+        for gid in extra:
+            print(f&quot;  gid={gid}&quot;)
+
+    return {
+        &quot;eligible_gids&quot;: list(eligible_gids),
+        &quot;collection_gids&quot;: list(collection_gids),
+        &quot;missing&quot;: list(missing),
+        &quot;extra&quot;: list(extra),
+    }
+
+
+# ── Background-job + queue health ───────────────────────────────
+
+def enqueue_health(verbose: bool = True) -&gt; Dict[str, Any]:
+    &quot;&quot;&quot;6-step roll-up: Redis ping + queues + workers + recent jobs + smoke test.&quot;&quot;&quot;
+    frappe.db.rollback()
+    out: Dict[str, Any] = {}
+
+    try:
+        from frappe.utils.background_jobs import get_redis_conn
+        out[&quot;redis_ping&quot;] = get_redis_conn().ping()
+    except Exception as e:
+        out[&quot;redis_ping&quot;] = f&quot;ERROR: {e}&quot;
+
+    try:
+        from frappe.utils.background_jobs import get_queue
+        queues_info = {}
+        for name in (&quot;short&quot;, &quot;default&quot;, &quot;long&quot;):
+            q = get_queue(name)
+            queues_info[name] = {
+                &quot;actual_name&quot;: q.name,
+                &quot;depth&quot;: len(q),
+                &quot;failed&quot;: q.failed_job_registry.count,
+                &quot;scheduled&quot;: q.scheduled_job_registry.count,
+                &quot;started&quot;: q.started_job_registry.count,
+            }
+        out[&quot;queues&quot;] = queues_info
+    except Exception as e:
+        out[&quot;queues&quot;] = f&quot;ERROR: {e}&quot;
+
+    try:
+        from rq import Worker
+        from frappe.utils.background_jobs import get_redis_conn
+        workers = Worker.all(connection=get_redis_conn())
+        out[&quot;workers&quot;] = [
+            {&quot;name&quot;: w.name, &quot;state&quot;: w.get_state(),
+             &quot;queues&quot;: [qq.name for qq in w.queues],
+             &quot;birth&quot;: str(w.birth_date)}
+            for w in workers
+        ]
+    except Exception as e:
+        out[&quot;workers&quot;] = f&quot;ERROR: {e}&quot;
+
+    try:
+        from rq.registry import FailedJobRegistry, FinishedJobRegistry
+        from rq.job import Job
+        from frappe.utils.background_jobs import get_queue
+        recents = {}
+        for name in (&quot;short&quot;, &quot;default&quot;, &quot;long&quot;):
+            q = get_queue(name)
+            fin = FinishedJobRegistry(queue=q)
+            fail = FailedJobRegistry(queue=q)
+            recents[name] = {&quot;finished&quot;: [], &quot;failed&quot;: []}
+            for jid in fin.get_job_ids(0, 5):
+                try:
+                    j = Job.fetch(jid, connection=q.connection)
+                    recents[name][&quot;finished&quot;].append({
+                        &quot;ended_at&quot;: str(j.ended_at), &quot;func&quot;: j.func_name,
+                    })
+                except Exception:
+                    pass
+            for jid in fail.get_job_ids(0, 5):
+                try:
+                    j = Job.fetch(jid, connection=q.connection)
+                    recents[name][&quot;failed&quot;].append({
+                        &quot;ended_at&quot;: str(j.ended_at), &quot;func&quot;: j.func_name,
+                        &quot;exc_excerpt&quot;: (j.exc_info or &quot;&quot;)[:200].replace(&quot;\n&quot;, &quot; &quot;),
+                    })
+                except Exception:
+                    pass
+        out[&quot;recent_jobs&quot;] = recents
+    except Exception as e:
+        out[&quot;recent_jobs&quot;] = f&quot;ERROR: {e}&quot;
+
+    try:
+        job = frappe.enqueue(
+            &quot;frappe.utils.background_jobs.test_job&quot;,
+            queue=&quot;short&quot;, timeout=10, s=1,
+        )
+        deadline = time.time() + 10
+        status = job.get_status()
+        while time.time() &lt; deadline and status not in (&quot;finished&quot;, &quot;failed&quot;):
+            time.sleep(0.5)
+            status = job.get_status(refresh=True)
+        out[&quot;smoke_test&quot;] = {
+            &quot;final_status&quot;: status, &quot;id&quot;: job.id,
+            &quot;exc_excerpt&quot;: (job.exc_info or &quot;&quot;)[:300] if status == &quot;failed&quot; else None,
+        }
+    except Exception as e:
+        out[&quot;smoke_test&quot;] = {&quot;error&quot;: str(e)}
+
+    if verbose:
+        print(&quot;== Redis ===========================================&quot;)
+        print(f&quot;  ping = {out['redis_ping']}&quot;)
+        print(&quot;\n== Queues ==========================================&quot;)
+        if isinstance(out[&quot;queues&quot;], dict):
+            for name, info in out[&quot;queues&quot;].items():
+                tag = &quot;✓&quot; if info[&quot;depth&quot;] &lt; 100 and info[&quot;failed&quot;] == 0 else &quot;⚠&quot;
+                print(f&quot;  {tag} {name:8s}  depth={info['depth']:4d}  &quot;
+                      f&quot;started={info['started']:3d}  &quot;
+                      f&quot;failed={info['failed']:3d}  &quot;
+                      f&quot;scheduled={info['scheduled']:3d}&quot;)
+        else:
+            print(f&quot;  {out['queues']}&quot;)
+        print(&quot;\n== Workers =========================================&quot;)
+        if isinstance(out[&quot;workers&quot;], list):
+            print(f&quot;  {len(out['workers'])} workers registered&quot;)
+            for w in out[&quot;workers&quot;]:
+                print(f&quot;    {w['name']}  state={w['state']}  queues={w['queues']}&quot;)
+        else:
+            print(f&quot;  {out['workers']}&quot;)
+        print(&quot;\n== Smoke test ======================================&quot;)
+        if isinstance(out[&quot;smoke_test&quot;], dict):
+            st = out[&quot;smoke_test&quot;].get(&quot;final_status&quot;)
+            mark = &quot;✓&quot; if st == &quot;finished&quot; else &quot;✗&quot;
+            print(f&quot;  {mark} test_job final_status = {st}&quot;)
+            if st == &quot;failed&quot;:
+                print(f&quot;    {out['smoke_test'].get('exc_excerpt')}&quot;)
+        else:
+            print(f&quot;  {out['smoke_test']}&quot;)
+        print(&quot;\n== Recent jobs =====================================&quot;)
+        if isinstance(out[&quot;recent_jobs&quot;], dict):
+            for name, info in out[&quot;recent_jobs&quot;].items():
+                print(f&quot;  {name}: {len(info['finished'])} finished, &quot;
+                      f&quot;{len(info['failed'])} failed (last 5)&quot;)
+                for f in info[&quot;failed&quot;]:
+                    print(f&quot;    FAILED {f['ended_at']}  {f['func']}: {f['exc_excerpt']}&quot;)
+
+    return out
+
+
+def queue_failures_for(func_name_pattern: str, limit: int = 20,
+                       verbose: bool = True) -&gt; List[Dict[str, Any]]:
+    &quot;&quot;&quot;Search RQ FailedJobRegistry for a function-name substring.
+    Use BEFORE refactoring/moving a function (L-057).&quot;&quot;&quot;
+    frappe.db.rollback()
+    from rq.registry import FailedJobRegistry
+    from rq.job import Job
+    from frappe.utils.background_jobs import get_queue
+
+    results = []
+    for name in (&quot;short&quot;, &quot;default&quot;, &quot;long&quot;):
+        q = get_queue(name)
+        reg = FailedJobRegistry(queue=q)
+        for jid in reg.get_job_ids(0, 200):
+            try:
+                j = Job.fetch(jid, connection=q.connection)
+                fn = j.func_name or &quot;&quot;
+                if func_name_pattern in fn:
+                    results.append({
+                        &quot;queue&quot;: name,
+                        &quot;ended_at&quot;: str(j.ended_at),
+                        &quot;func&quot;: fn,
+                        &quot;exc_excerpt&quot;: (j.exc_info or &quot;&quot;)[:400].replace(&quot;\n&quot;, &quot; | &quot;),
+                    })
+            except Exception:
+                pass
+        if len(results) &gt;= limit:
+            break
+
+    if verbose:
+        print(f&quot;\nFailed jobs matching '{func_name_pattern}': {len(results)}&quot;)
+        for r in results[:limit]:
+            print(f&quot;  [{r['queue']}] {r['ended_at']}  {r['func']}&quot;)
+            print(f&quot;    {r['exc_excerpt'][:300]}&quot;)
+    return results[:limit]
+
+
+def scheduled_crons(verbose: bool = True) -&gt; List[Dict[str, Any]]:
+    &quot;&quot;&quot;List SP scheduled jobs. Use to verify `bench migrate` registered
+    new scheduler_events entries (L-049).&quot;&quot;&quot;
+    frappe.db.rollback()
+    rows = frappe.db.sql(
+        &quot;&quot;&quot;
+        SELECT name, method, cron_format, stopped, frequency
+          FROM &quot;tabScheduled Job Type&quot;
+         WHERE method LIKE 'tap_lms.%'
+         ORDER BY method
+        &quot;&quot;&quot;,
+        as_dict=True,
+    )
+    if verbose:
+        print(f&quot;\nSP-related Scheduled Job Type rows: {len(rows)}&quot;)
+        for r in rows:
+            mark = &quot;✓&quot; if not r[&quot;stopped&quot;] else &quot;✗ STOPPED&quot;
+            print(f&quot;  {mark}  {r['method']}&quot;)
+            print(f&quot;      cron={r['cron_format'] or '-'}  &quot;
+                  f&quot;freq={r['frequency'] or '-'}&quot;)
+    return rows
+
+
+# ── Glific contact-field inspection ─────────────────────────────
+
+def glific_fields(glific_id: str, keys: Optional[List[str]] = None,
+                  verbose: bool = True) -&gt; Dict[str, Any]:
+    &quot;&quot;&quot;Fetch SP-managed contact fields for a Glific contact.&quot;&quot;&quot;
+    if keys is None:
+        keys = _SP_CONTACT_FIELDS_DEFAULT
+    fields = _fetch_glific_contact_full(glific_id)
+    out = {}
+    for k in keys:
+        v = fields.get(k)
+        if isinstance(v, dict):
+            out[k] = {&quot;value&quot;: v.get(&quot;value&quot;),
+                      &quot;inserted_at&quot;: v.get(&quot;inserted_at&quot;)}
+        else:
+            out[k] = v
+    if verbose:
+        print(f&quot;\nGlific contact {glific_id} — {len(out)} fields:&quot;)
+        for k in keys:
+            entry = out.get(k)
+            if isinstance(entry, dict):
+                print(f&quot;  {k:32s} = {entry['value']!r:15s}  &quot;
+                      f&quot;(set {entry['inserted_at']})&quot;)
+            else:
+                marker = &quot;✗ MISSING&quot; if entry is None else &quot;&quot;
+                print(f&quot;  {k:32s} = {entry!r}  {marker}&quot;)
+    return out
+
+
+# ── Private helpers ─────────────────────────────────────────────
+
+_SP_CONTACT_FIELDS_DEFAULT = [
+    # 7 identity
+    &quot;student_id&quot;, &quot;student_name&quot;, &quot;batch_id&quot;, &quot;archetype&quot;,
+    &quot;language_id&quot;, &quot;experiment_arm&quot;, &quot;course_level&quot;,
+    # 11 base state
+    &quot;resolved_flow_state&quot;, &quot;current_week&quot;, &quot;current_path&quot;, &quot;current_tier&quot;,
+    &quot;program_status&quot;, &quot;total_points&quot;, &quot;current_streak&quot;, &quot;grace_window_end_at&quot;,
+    &quot;current_expected_submission_type&quot;, &quot;last_escalation_step&quot;, &quot;submission_count&quot;,
+    # 9 gamification + 1 computed
+    &quot;total_activity_points&quot;, &quot;weekly_activity_points&quot;,
+    &quot;total_quiz_points&quot;, &quot;weekly_quiz_points&quot;,
+    &quot;total_submission_points&quot;, &quot;weekly_submission_points&quot;,
+    &quot;special_gems&quot;, &quot;weekly_submission_done&quot;, &quot;bonus_quiz_points&quot;,
+    &quot;weekly_engagement_points&quot;,
+    # 2 CR-003 escalation routing
+    &quot;escalation_order&quot;, &quot;escalation_type&quot;,
+]
+
+
+def _fetch_glific_contact_full(glific_id: str) -&gt; Dict[str, Any]:
+    if not glific_id:
+        return {}
+    try:
+        from tap_lms.glific_integration import (
+            get_glific_settings, get_glific_auth_headers,
+        )
+        settings = get_glific_settings()
+        r = requests.post(
+            f&quot;{settings.api_url}/api&quot;,
+            json={
+                &quot;query&quot;: &quot;query c($id: ID!){contact(id:$id){contact{id fields}}}&quot;,
+                &quot;variables&quot;: {&quot;id&quot;: str(glific_id)},
+            },
+            headers=get_glific_auth_headers(), timeout=15,
+        ).json()
+        raw = (r.get(&quot;data&quot;) or {}).get(&quot;contact&quot;, {}).get(&quot;contact&quot;, {}).get(&quot;fields&quot;)
+        return json.loads(raw) if isinstance(raw, str) else (raw or {})
+    except Exception:
+        return {}
+
+
+def _fetch_glific_contact(glific_id: str) -&gt; Dict[str, Any]:
+    raw_fields = _fetch_glific_contact_full(glific_id)
+    out = {}
+    for k, v in raw_fields.items():
+        out[k] = v.get(&quot;value&quot;) if isinstance(v, dict) else v
+    return out
+
+
+def _call_get_student_state(student_id: str) -&gt; Dict[str, Any]:
+    from tap_lms.summer_program.program_enrollment_api import get_student_state
+    frappe.local.response = frappe._dict({})
+    get_student_state(student_id)
+    return dict(frappe.local.response)
+</code></pre>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

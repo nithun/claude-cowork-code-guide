@@ -1,0 +1,1340 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Configure Frappe's hooks.py — the central wiring file that registers doc events on foreign DocTypes, scheduler jobs, custom auth, JS/CSS bundles, fixtures, override classes, and dozens of other extension points. Trigger whenever the user wants something to happen when a CORE DocType changes (their own DocType uses controller methods, not hooks), schedule a recurring job, override a stock method, run code on app install, or include extra JS/CSS site-wide. Also use whenever the conversation mentions `hooks.py` directly.">
+      
+      
+      
+      
+        <link rel="prev" href="../doctype/">
+      
+      
+        <link rel="next" href="../postgres/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Frappe hooks.py skill - claude-cowork-code — Team Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#frappe-hookspy-skill" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="claude-cowork-code — Team Guide" class="md-header__button md-logo" aria-label="claude-cowork-code — Team Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            claude-cowork-code — Team Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Frappe hooks.py skill
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="claude-cowork-code — Team Guide" class="md-nav__button md-logo" aria-label="claude-cowork-code — Team Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    claude-cowork-code — Team Guide
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to use claude-cowork-code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adopt-for-new-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adopt it for a new project
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adopt-frappe-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adopt it for a new Frappe app
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../engineering-playbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engineering playbook — CR → build → release
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../methodology/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Methodology — why it's built this way
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../product-playbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product playbook — idea → BR / PRD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../publishing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Publishing the guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Frappe
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe reference skills
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe API skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bench/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe bench skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../client-script/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe client script skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe controller skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../doctype/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe DocType skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe hooks.py skill
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe hooks.py skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#when-hooks-vs-when-controllers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When hooks vs. when controllers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#doc_events" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        doc_events
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scheduler-events" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scheduler events
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#background-jobs-via-frappeenqueue-the-silent-success-failure-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Background jobs via frappe.enqueue — the silent-success failure mode
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fixtures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fixtures
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#js-css-includes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JS / CSS includes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#override-classes-the-nuclear-option" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Override classes (the nuclear option)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#permission-queries-row-level-filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Permission queries (row-level filtering)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-migrate-uninstall-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install / migrate / uninstall lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#patches" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Patches
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#email-and-notifications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Email and notifications
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#boot-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Boot session
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-not-to-put-in-hookspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What NOT to put in hooks.py
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#after-editing-hookspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        After editing hooks.py
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../postgres/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe + PostgreSQL skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe testing skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#when-hooks-vs-when-controllers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When hooks vs. when controllers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#doc_events" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        doc_events
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scheduler-events" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scheduler events
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#background-jobs-via-frappeenqueue-the-silent-success-failure-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Background jobs via frappe.enqueue — the silent-success failure mode
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fixtures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fixtures
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#js-css-includes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JS / CSS includes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#override-classes-the-nuclear-option" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Override classes (the nuclear option)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#permission-queries-row-level-filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Permission queries (row-level filtering)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-migrate-uninstall-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install / migrate / uninstall lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#patches" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Patches
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#email-and-notifications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Email and notifications
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#boot-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Boot session
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-not-to-put-in-hookspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What NOT to put in hooks.py
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#after-editing-hookspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        After editing hooks.py
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="frappe-hookspy-skill">Frappe hooks.py skill</h1>
+<p><code>hooks.py</code> lives at <code>app/&lt;your_app&gt;/hooks.py</code> and is the single declarative configuration file Frappe reads at startup. Every "react to X happening anywhere in the system" extension goes here.</p>
+<h2 id="when-hooks-vs-when-controllers">When hooks vs. when controllers</h2>
+<p>Use a <strong>controller method</strong> (<code>&lt;doctype&gt;.py</code> lifecycle hook) when reacting to events on <strong>your own</strong> DocType. The controller is the home for that doc's logic.</p>
+<p>Use <strong><code>hooks.py</code> doc_events</strong> when reacting to events on a DocType you don't own — typically a core ERPNext DocType (<code>User</code>, <code>Customer</code>, <code>Sales Invoice</code>) or one from another app. You can't edit their controllers, so you register a callback in <code>hooks.py</code>.</p>
+<h2 id="doc_events">doc_events</h2>
+<pre><code class="language-python">doc_events = {
+    &quot;User&quot;: {
+        &quot;after_insert&quot;: &quot;tap_lms.tap_lms.user_hooks.create_student_profile&quot;,
+    },
+    &quot;Sales Invoice&quot;: {
+        &quot;on_submit&quot;: [
+            &quot;tap_lms.tap_lms.billing_hooks.activate_paid_enrollments&quot;,
+            &quot;tap_lms.tap_lms.billing_hooks.send_receipt&quot;,
+        ],
+    },
+    &quot;*&quot;: {
+        &quot;before_save&quot;: &quot;tap_lms.tap_lms.audit.stamp_modified_by_ip&quot;,
+    },
+}
+</code></pre>
+<p>Each value is a dotted import path to a function. Signature: <code>def handler(doc, method=None):</code> where <code>doc</code> is the document and <code>method</code> is the event name (useful when one function listens to multiple events).</p>
+<p><code>"*"</code> matches every DocType. Use sparingly — it runs on every save in the system.</p>
+<h2 id="scheduler-events">Scheduler events</h2>
+<pre><code class="language-python">scheduler_events = {
+    &quot;all&quot;:     [&quot;tap_lms.tap_lms.scheduled.heartbeat&quot;],         # every ~4 minutes
+    &quot;hourly&quot;:  [&quot;tap_lms.tap_lms.scheduled.refresh_summaries&quot;],
+    &quot;daily&quot;:   [&quot;tap_lms.tap_lms.scheduled.expire_lapsed_enrollments&quot;],
+    &quot;weekly&quot;:  [&quot;tap_lms.tap_lms.scheduled.send_weekly_digest&quot;],
+    &quot;monthly&quot;: [&quot;tap_lms.tap_lms.scheduled.archive_old_attempts&quot;],
+    &quot;cron&quot;: {
+        &quot;0 2 * * *&quot;: [&quot;tap_lms.tap_lms.scheduled.nightly_sync&quot;],
+    },
+}
+</code></pre>
+<p><code>cron</code> keys take standard 5-field crontab expressions. Functions take no arguments. Errors are logged to the Error Log DocType; they don't kill the scheduler.</p>
+<p>For the scheduler to actually run, the <code>bench</code> daemon must be up. In dev: <code>bench start</code>. In prod: supervisor should be running <code>bench schedule</code> and <code>bench worker --queue default,short,long</code>.</p>
+<p><strong>Critical: changes to <code>scheduler_events</code> require <code>bench migrate</code>, not just <code>bench restart</code>.</strong> Frappe stores scheduler entries in the <code>tabScheduled Job Type</code> table; that table is populated from <code>hooks.scheduler_events</code> only by <code>migrate</code>. A new cron entry added to <code>hooks.py</code> after restart-only deploys is invisible to the scheduler — the function never fires. Verify with:</p>
+<pre><code class="language-python">import frappe; frappe.db.rollback()
+frappe.db.sql(&quot;&quot;&quot;
+    SELECT method, cron_format, stopped FROM &quot;tabScheduled Job Type&quot;
+     WHERE method LIKE 'your_app.your_module.%' ORDER BY method
+&quot;&quot;&quot;, as_dict=True)
+</code></pre>
+<p>This contrasts with <code>doc_events</code>, <code>override_doctype_class</code>, and other <code>hooks.py</code> keys that take effect on <code>bench restart</code> alone because they're read at code-import time.</p>
+<h2 id="background-jobs-via-frappeenqueue-the-silent-success-failure-mode">Background jobs via <code>frappe.enqueue</code> — the silent-success failure mode</h2>
+<p>Functions you call with <code>frappe.enqueue(method_path, queue="short", **kwargs)</code> run in RQ workers. Two things to know:</p>
+<p><strong>1. Queues and priorities.</strong> Standard queues are <code>short</code> (high priority, jobs &lt; ~30s), <code>default</code> (medium), <code>long</code> (low, multi-minute). Workers typically poll multiple queues; <code>short</code> jobs interleave fastest. Use <code>short</code> for per-user-event work (Glific sync, content-log inserts) and <code>long</code> for slow API calls (Vocallabs, AI feedback).</p>
+<p><strong>2. The silent-success failure mode.</strong> RQ marks a job as <strong>failed</strong> only if it raises an exception. A job that catches an exception and returns normally is marked <strong>finished</strong> — the FailedJobRegistry stays empty, queue-depth alerts stay silent, but the work the job was supposed to do never happened.</p>
+<pre><code class="language-python"># WRONG — looks &quot;finished&quot; to RQ even when the insert fails
+def my_job(student_id, content_id, ...):
+    try:
+        log.insert(ignore_permissions=True)
+        frappe.db.commit()
+    except Exception as e:
+        frappe.log_error(f&quot;job failed: {e}&quot;, &quot;My App&quot;)
+        # implicit return None → RQ thinks the job succeeded
+
+# RIGHT — fails loudly so RQ + FailedJobRegistry + ops see it
+def my_job(student_id, content_id, ...):
+    try:
+        log.insert(ignore_permissions=True)
+        frappe.db.commit()
+    except Exception as e:
+        try:
+            frappe.db.rollback()    # L-030: clears poisoned txn so log_error works
+        except Exception:
+            pass
+        try:
+            frappe.log_error(
+                f&quot;my_job failed: {e}\nstudent={student_id} content={content_id}&quot;,
+                &quot;My App&quot;,
+            )
+        except Exception:
+            frappe.logger().error(f&quot;my_job failed (log_error also failed): {e}&quot;)
+        raise   # ← critical: marks the job FAILED in RQ
+</code></pre>
+<p>Two corollaries:
+- <strong>Rollback before log_error.</strong> Postgres aborts the whole transaction on the first failed statement; <code>frappe.log_error</code> does its own SELECT and would fail with <code>InFailedSqlTransaction</code> without the rollback. The nested try/except around log_error itself is a defense against double-fault when the Error Log doctype meta lookup also fails.
+- <strong>Pair the <code>raise</code> with retry+DLQ if the job is idempotent.</strong> Pattern P-007: enqueue the job again with <code>retry_count + 1</code> until a <code>MAX_RETRIES</code> budget is exhausted, then write a structured DLQ Error Log entry for manual replay. <code>state_machine._sync_contact_fields_job</code> is the canonical implementation.</p>
+<p><strong>Before moving / renaming an existing background job</strong>, search its failure history first:</p>
+<pre><code class="language-python"># After loading sp_console (see skills/frappe-bench/SKILL.md console section):
+queue_failures_for(&quot;the_func_name&quot;)
+</code></pre>
+<p>If there are hits, fix the root cause inline before relocating. A function being moved usually triggers a code review; a silent-failure bug being moved unchanged turns into a launch-week incident.</p>
+<h2 id="fixtures">fixtures</h2>
+<p>Fixtures are records exported as JSON and re-imported on <code>bench migrate</code> — used for Roles, Custom Fields, Property Setters, Workflows, Print Formats, anything you want to ship as part of the app.</p>
+<pre><code class="language-python">fixtures = [
+    {&quot;dt&quot;: &quot;Custom Field&quot;, &quot;filters&quot;: [[&quot;dt&quot;, &quot;in&quot;, [&quot;User&quot;, &quot;Customer&quot;]]]},
+    {&quot;dt&quot;: &quot;Property Setter&quot;, &quot;filters&quot;: [[&quot;doc_type&quot;, &quot;in&quot;, [&quot;User&quot;, &quot;Customer&quot;]]]},
+    {&quot;dt&quot;: &quot;Role&quot;, &quot;filters&quot;: [[&quot;name&quot;, &quot;in&quot;, [&quot;TAP Instructor&quot;, &quot;TAP Student&quot;]]]},
+    &quot;Workflow&quot;,
+    &quot;Workflow State&quot;,
+    &quot;Workflow Action Master&quot;,
+]
+</code></pre>
+<p>Export with <code>bench --site &lt;site&gt; export-fixtures</code>. The JSON files land in <code>app/&lt;your_app&gt;/fixtures/</code>. Commit them.</p>
+<h2 id="js-css-includes">JS / CSS includes</h2>
+<pre><code class="language-python"># Loaded on every desk page
+app_include_js = [&quot;/assets/tap_lms/js/desk.bundle.js&quot;]
+app_include_css = [&quot;/assets/tap_lms/css/desk.bundle.css&quot;]
+
+# Loaded on every portal/web page
+web_include_js = [&quot;/assets/tap_lms/js/portal.bundle.js&quot;]
+web_include_css = [&quot;/assets/tap_lms/css/portal.bundle.css&quot;]
+
+# Loaded only on a specific DocType's form (alternative to a sibling .js file)
+doctype_js = {&quot;Sales Invoice&quot;: &quot;public/js/sales_invoice_overrides.js&quot;}
+doctype_list_js = {&quot;Sales Invoice&quot;: &quot;public/js/sales_invoice_list.js&quot;}
+</code></pre>
+<p>For bundled assets, drop <code>.bundle.js</code> files in <code>public/js/</code> and Frappe's esbuild step picks them up on <code>bench build</code>.</p>
+<h2 id="override-classes-the-nuclear-option">Override classes (the nuclear option)</h2>
+<pre><code class="language-python">override_doctype_class = {
+    &quot;Sales Invoice&quot;: &quot;tap_lms.tap_lms.overrides.sales_invoice.CustomSalesInvoice&quot;,
+}
+</code></pre>
+<p>The override class subclasses the original. Use only when you need to change behavior the original doesn't expose via lifecycle hooks. Test it on every Frappe upgrade — overrides are the most upgrade-fragile thing in <code>hooks.py</code>.</p>
+<pre><code class="language-python">override_whitelisted_methods = {
+    &quot;frappe.www.contact.send_message&quot;: &quot;tap_lms.tap_lms.overrides.contact.send_message&quot;,
+}
+</code></pre>
+<h2 id="permission-queries-row-level-filtering">Permission queries (row-level filtering)</h2>
+<pre><code class="language-python">permission_query_conditions = {
+    &quot;Course Enrollment&quot;: &quot;tap_lms.tap_lms.permissions.enrollment_query&quot;,
+}
+
+has_permission = {
+    &quot;Course Enrollment&quot;: &quot;tap_lms.tap_lms.permissions.enrollment_has_permission&quot;,
+}
+</code></pre>
+<p>The query function returns a SQL fragment Frappe AND's into list queries. The has_permission function returns a bool for individual doc access.</p>
+<pre><code class="language-python">def enrollment_query(user):
+    if &quot;TAP Admin&quot; in frappe.get_roles(user): return &quot;&quot;
+    return f&quot;`tabCourse Enrollment`.owner = {frappe.db.escape(user)}&quot;
+</code></pre>
+<p>(That backtick syntax is the one place Frappe's translator handles for you. On Postgres it becomes <code>"tabCourse Enrollment".owner</code>.)</p>
+<h2 id="install-migrate-uninstall-lifecycle">Install / migrate / uninstall lifecycle</h2>
+<pre><code class="language-python">before_install = &quot;tap_lms.install.before_install&quot;
+after_install = &quot;tap_lms.install.after_install&quot;
+after_migrate = [&quot;tap_lms.install.create_default_roles&quot;]
+before_uninstall = &quot;tap_lms.install.cleanup&quot;
+</code></pre>
+<p><code>after_install</code> runs once per site when the app is first installed; <code>after_migrate</code> runs on every <code>bench migrate</code>. Idempotency matters — wrap in <code>if not frappe.db.exists(...)</code>.</p>
+<h2 id="patches">Patches</h2>
+<p>Schema changes that need data migration go in <code>patches.txt</code> (one dotted path per line) and the patch lives at <code>app/&lt;your_app&gt;/patches/&lt;version&gt;/&lt;name&gt;.py</code> with an <code>execute()</code> function. Patches run in order, each only once. Use them whenever you rename fields, change types non-trivially, or backfill data.</p>
+<h2 id="email-and-notifications">Email and notifications</h2>
+<pre><code class="language-python">notification_config = &quot;tap_lms.notifications.get_notification_config&quot;
+</code></pre>
+<p>The function returns a dict that drives the bell-icon notifications in the desk. Useful for "you have N pending grading items" indicators.</p>
+<h2 id="boot-session">Boot session</h2>
+<pre><code class="language-python">boot_session = &quot;tap_lms.boot.boot_session&quot;
+</code></pre>
+<p>Inject keys into the JS <code>frappe.boot</code> object that's available on every page. Useful for global config the front-end needs (feature flags, branding).</p>
+<h2 id="what-not-to-put-in-hookspy">What NOT to put in hooks.py</h2>
+<ul>
+<li>Long imports at module level — <code>hooks.py</code> is read on every request indirectly via the metadata cache. Keep it dependency-light.</li>
+<li>Complex logic — it's a config file. Functions belong elsewhere; <code>hooks.py</code> only references their dotted paths.</li>
+<li>Conditional blocks based on environment — Frappe doesn't reload <code>hooks.py</code> on env changes; you'll surprise yourself. Use <code>frappe.conf.get(...)</code> inside the called functions instead.</li>
+</ul>
+<h2 id="after-editing-hookspy">After editing hooks.py</h2>
+<p>Hooks are cached. After changes:</p>
+<pre><code class="language-bash">bench --site &lt;site&gt; clear-cache
+bench restart   # or `bench start` in dev
+</code></pre>
+<p>Without this, your new doc_events / scheduler entries won't fire and you'll spend an hour blaming the wrong code.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1229 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Write or modify Frappe client scripts — the `<doctype>.js` form scripts and List View customizations that run in the user's browser. Trigger whenever the user mentions form behavior (showing/hiding fields, setting defaults, adding buttons, validating before save in the UI, fetching values from linked records, custom dialogs, list view filters/colors). Also use for Form-level Web Forms and Portal pages, and when moving slow/synchronous logic from the server into the form for snappier UX.">
+      
+      
+      
+      
+        <link rel="prev" href="../bench/">
+      
+      
+        <link rel="next" href="../controller/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Frappe client script skill - claude-cowork-code — Team Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#frappe-client-script-skill" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="claude-cowork-code — Team Guide" class="md-header__button md-logo" aria-label="claude-cowork-code — Team Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            claude-cowork-code — Team Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Frappe client script skill
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="claude-cowork-code — Team Guide" class="md-nav__button md-logo" aria-label="claude-cowork-code — Team Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    claude-cowork-code — Team Guide
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to use claude-cowork-code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adopt-for-new-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adopt it for a new project
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adopt-frappe-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adopt it for a new Frappe app
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../engineering-playbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engineering playbook — CR → build → release
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../methodology/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Methodology — why it's built this way
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../product-playbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product playbook — idea → BR / PRD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../publishing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Publishing the guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Frappe
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe reference skills
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe API skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bench/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe bench skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe client script skill
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe client script skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#two-scopes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two scopes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#form-script-anatomy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Form script anatomy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-frm-object-what-you-actually-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The frm object — what you actually use
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calling-the-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Calling the server
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fetch_from-the-lazy-mans-auto-populate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fetch_from — the lazy man's auto-populate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dialogs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dialogs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#list-view-tweaks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        List view tweaks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#translation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Translation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-not-to-put-it-in-js" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When NOT to put it in JS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#loading-order-and-caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Loading order and caching
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#file-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File path
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe controller skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../doctype/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe DocType skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe hooks.py skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../postgres/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe + PostgreSQL skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe testing skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#two-scopes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two scopes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#form-script-anatomy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Form script anatomy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-frm-object-what-you-actually-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The frm object — what you actually use
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calling-the-server" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Calling the server
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fetch_from-the-lazy-mans-auto-populate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fetch_from — the lazy man's auto-populate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dialogs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dialogs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#list-view-tweaks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        List view tweaks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#translation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Translation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-not-to-put-it-in-js" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When NOT to put it in JS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#loading-order-and-caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Loading order and caching
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#file-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File path
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="frappe-client-script-skill">Frappe client script skill</h1>
+<p>Client scripts run in the desk (the back-office UI) on top of Frappe's form framework. The entry point is a sibling <code>.js</code> file next to the DocType JSON, or a <code>Client Script</code> record stored in the DB. File-based wins for version control; DB-based wins for hot-fixes and per-site overrides.</p>
+<h2 id="two-scopes">Two scopes</h2>
+<ul>
+<li><strong>Form Script</strong> — runs on a single document's form view. <code>frappe.ui.form.on("Course Enrollment", { ... })</code>.</li>
+<li><strong>List View</strong> — runs on the list page. <code>frappe.listview_settings["Course Enrollment"] = { ... }</code>.</li>
+</ul>
+<p>There are also <code>frappe.ui.Dialog</code>, report scripts (<code>&lt;report&gt;.js</code>), and Web Form scripts. All speak the same <code>frm</code>/<code>frappe</code> API.</p>
+<h2 id="form-script-anatomy">Form script anatomy</h2>
+<pre><code class="language-javascript">frappe.ui.form.on(&quot;Course Enrollment&quot;, {
+    refresh(frm) {
+        // Runs every time the form is rendered (load, after save, after switching tabs back).
+        if (frm.doc.docstatus === 1 &amp;&amp; frm.doc.status === &quot;Active&quot;) {
+            frm.add_custom_button(__(&quot;Mark Completed&quot;), () =&gt; mark_completed(frm), __(&quot;Actions&quot;));
+        }
+        toggle_certificate_section(frm);
+    },
+
+    student(frm) {
+        // Runs when the `student` field changes.
+        if (!frm.doc.student) return;
+        frappe.db.get_value(&quot;Student&quot;, frm.doc.student, &quot;preferred_language&quot;)
+            .then(({ message }) =&gt; frm.set_value(&quot;language&quot;, message?.preferred_language));
+    },
+
+    validate(frm) {
+        // Browser-side validation. Server `validate` still runs — this is for fast UX feedback.
+        if (frm.doc.start_date &amp;&amp; frm.doc.end_date &amp;&amp; frm.doc.start_date &gt; frm.doc.end_date) {
+            frappe.throw(__(&quot;End date must be after start date&quot;));
+        }
+    },
+});
+
+function toggle_certificate_section(frm) {
+    frm.toggle_display(&quot;certificate_section&quot;, frm.doc.status === &quot;Completed&quot;);
+}
+
+function mark_completed(frm) {
+    frappe.call({
+        method: &quot;tap_lms.api.complete_enrollment&quot;,
+        args: { enrollment: frm.doc.name },
+        freeze: true,
+        freeze_message: __(&quot;Wrapping up...&quot;),
+    }).then(() =&gt; frm.reload_doc());
+}
+</code></pre>
+<p>The handler keys are: field event names (fires when that field changes), lifecycle events (<code>refresh</code>, <code>setup</code>, <code>onload</code>, <code>validate</code>, <code>before_save</code>, <code>before_submit</code>, <code>before_cancel</code>), and child-table events (<code>&lt;table_field&gt;_add</code>, <code>&lt;table_field&gt;_remove</code>).</p>
+<h2 id="the-frm-object-what-you-actually-use">The <code>frm</code> object — what you actually use</h2>
+<ul>
+<li><code>frm.doc</code> — the current document as a JS object. Mutate via setters, not direct assignment.</li>
+<li><code>frm.set_value(field, value)</code> — write to a field; triggers field events and dirty state.</li>
+<li><code>frm.set_df_property(field, prop, value)</code> — change a field property on the fly (<code>reqd</code>, <code>read_only</code>, <code>hidden</code>, <code>options</code>).</li>
+<li><code>frm.toggle_display(field, condition)</code> / <code>toggle_enable</code> / <code>toggle_reqd</code> — common patterns one-linered.</li>
+<li><code>frm.add_custom_button(label, action, group)</code> — adds to the top toolbar; <code>group</code> collapses related buttons under a menu.</li>
+<li><code>frm.dashboard.add_indicator(label, color)</code> — pill on the top of the form.</li>
+<li><code>frm.refresh_field("table_field")</code> — re-render a child table after programmatic changes.</li>
+<li><code>frm.reload_doc()</code> — fetch fresh server state.</li>
+<li><code>frm.is_dirty()</code> / <code>frm.dirty()</code> — track unsaved changes.</li>
+</ul>
+<h2 id="calling-the-server">Calling the server</h2>
+<p><code>frappe.call({ method, args, freeze })</code> is the primary RPC. The <code>method</code> must be a whitelisted Python method (<code>@frappe.whitelist()</code>) reachable by dotted path. For DocType methods, use <code>doc: frm.doc, method: "do_thing"</code> to invoke a controller method.</p>
+<p>For lookups, prefer the convenience helpers — they're cheaper than a full <code>frappe.call</code>:</p>
+<pre><code class="language-javascript">frappe.db.get_value(&quot;Course&quot;, course_name, &quot;title&quot;);
+frappe.db.get_doc(&quot;Course&quot;, course_name);
+frappe.db.get_list(&quot;Course Enrollment&quot;, { filters: { student }, fields: [&quot;name&quot;, &quot;status&quot;] });
+frappe.db.exists(&quot;Course Enrollment&quot;, { student, course });
+frappe.db.count(&quot;Lesson Progress&quot;, { enrollment });
+</code></pre>
+<h2 id="fetch_from-the-lazy-mans-auto-populate">fetch_from — the lazy man's auto-populate</h2>
+<p>Don't write a JS handler to copy a field from a linked doc — declare <code>fetch_from</code> in the DocType JSON instead:</p>
+<pre><code class="language-json">{ &quot;fieldname&quot;: &quot;course_title&quot;, &quot;fieldtype&quot;: &quot;Data&quot;, &quot;fetch_from&quot;: &quot;course.title&quot;, &quot;read_only&quot;: 1 }
+</code></pre>
+<p>Frappe handles the fetch automatically on the <code>course</code> field's change. Use JS only for transformations the JSON can't express.</p>
+<h2 id="dialogs">Dialogs</h2>
+<pre><code class="language-javascript">const dialog = new frappe.ui.Dialog({
+    title: __(&quot;Award Certificate&quot;),
+    fields: [
+        { fieldname: &quot;issue_date&quot;, fieldtype: &quot;Date&quot;, label: __(&quot;Issue Date&quot;), default: frappe.datetime.get_today(), reqd: 1 },
+        { fieldname: &quot;remarks&quot;, fieldtype: &quot;Small Text&quot;, label: __(&quot;Remarks&quot;) },
+    ],
+    primary_action_label: __(&quot;Award&quot;),
+    primary_action(values) {
+        frappe.call({
+            method: &quot;tap_lms.api.award_certificate&quot;,
+            args: { enrollment: frm.doc.name, ...values },
+        }).then(() =&gt; { dialog.hide(); frm.reload_doc(); });
+    },
+});
+dialog.show();
+</code></pre>
+<h2 id="list-view-tweaks">List view tweaks</h2>
+<pre><code class="language-javascript">frappe.listview_settings[&quot;Course Enrollment&quot;] = {
+    add_fields: [&quot;status&quot;, &quot;course&quot;, &quot;student&quot;],
+    get_indicator(doc) {
+        return {
+            &quot;Active&quot;:    [__(&quot;Active&quot;),    &quot;blue&quot;,   &quot;status,=,Active&quot;],
+            &quot;Completed&quot;: [__(&quot;Completed&quot;), &quot;green&quot;,  &quot;status,=,Completed&quot;],
+            &quot;Dropped&quot;:   [__(&quot;Dropped&quot;),   &quot;red&quot;,    &quot;status,=,Dropped&quot;],
+        }[doc.status];
+    },
+    onload(listview) {
+        listview.page.add_inner_button(__(&quot;Bulk Activate&quot;), () =&gt; bulk_activate(listview));
+    },
+};
+</code></pre>
+<p><code>add_fields</code> ensures the fields are in the row payload — without it, <code>doc.status</code> is <code>undefined</code> in <code>get_indicator</code>.</p>
+<h2 id="translation">Translation</h2>
+<p>Always wrap UI strings in <code>__("...")</code>. Frappe extracts these for the translation files. <code>__("Hello {0}", [name])</code> for interpolation.</p>
+<h2 id="when-not-to-put-it-in-js">When NOT to put it in JS</h2>
+<ul>
+<li><strong>Authorization checks</strong> — never trust the browser. The server <code>validate</code> is the source of truth; client checks are for UX, not security.</li>
+<li><strong>Complex computations</strong> — round-trip to a whitelisted method instead.</li>
+<li><strong>Anything that needs DB writes</strong> — write a server method, call it.</li>
+</ul>
+<h2 id="loading-order-and-caching">Loading order and caching</h2>
+<p>The desk caches <code>.js</code> files aggressively. After editing, run <code>bench --site &lt;site&gt; clear-cache</code> or hit Ctrl-Shift-R in the browser. If you're staring at unchanged behavior, it's the cache — every time.</p>
+<h2 id="file-path">File path</h2>
+<pre><code>app/&lt;your_app&gt;/&lt;your_module&gt;/doctype/course_enrollment/course_enrollment.js
+</code></pre>
+<p>For scripts that span multiple DocTypes, use <code>app/&lt;your_app&gt;/public/js/&lt;feature&gt;.js</code> and register it via <code>app_include_js</code> in <code>hooks.py</code> (see the <code>frappe-hooks</code> skill).</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

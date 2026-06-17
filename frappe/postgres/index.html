@@ -1,0 +1,2142 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Handle PostgreSQL-specific concerns in a Frappe app. The TAP LMS database is Postgres, not MariaDB — every raw SQL query, index decision, and migration tweak has to honor PG semantics. Trigger whenever the user mentions raw SQL, query performance, indexes, full-text search, JSON fields, locks, sequences, schema migrations, `psql`, `pg_dump`, or anything that diverges between MySQL/MariaDB and Postgres. Trigger even if the user says "the database" generically — if they're writing SQL or tuning DB behavior, this skill applies.">
+      
+      
+      
+      
+        <link rel="prev" href="../hooks/">
+      
+      
+        <link rel="next" href="../test/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Frappe + PostgreSQL skill - claude-cowork-code — Team Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#frappe-postgresql-skill" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="claude-cowork-code — Team Guide" class="md-header__button md-logo" aria-label="claude-cowork-code — Team Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            claude-cowork-code — Team Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Frappe + PostgreSQL skill
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="claude-cowork-code — Team Guide" class="md-nav__button md-logo" aria-label="claude-cowork-code — Team Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    claude-cowork-code — Team Guide
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to use claude-cowork-code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adopt-for-new-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adopt it for a new project
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adopt-frappe-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adopt it for a new Frappe app
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../engineering-playbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engineering playbook — CR → build → release
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../methodology/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Methodology — why it's built this way
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../product-playbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product playbook — idea → BR / PRD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../publishing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Publishing the guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Frappe
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe reference skills
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe API skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bench/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe bench skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../client-script/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe client script skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe controller skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../doctype/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe DocType skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe hooks.py skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe + PostgreSQL skill
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe + PostgreSQL skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#quick-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick rule
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-differences-that-bite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The differences that bite
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The differences that bite">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#identifier-quoting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Identifier quoting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ifnull-isnull-coalesce" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IFNULL / ISNULL → COALESCE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#group_concat-string_agg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GROUP_CONCAT → STRING_AGG
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#date-math" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Date math
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limit-x-y-limit-y-offset-x" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LIMIT x, y → LIMIT y OFFSET x
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#case-sensitivity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Case sensitivity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#boolean" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Boolean
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#select-row_count-does-not-exist-on-pg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SELECT ROW_COUNT() does not exist on PG
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#where-col-in-s-where-col-anys-and-the-frappe-modify_values-gotcha" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WHERE col IN %s → WHERE col = ANY(%s) (and the Frappe modify_values gotcha)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#on-duplicate-key-update-on-conflict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ON DUPLICATE KEY UPDATE → ON CONFLICT
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#full-text-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full-text search
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#json-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JSON fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#postgres-string-functions-on-json-columns-need-an-explicit-text-cast" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Postgres string functions on JSON columns need an explicit ::text cast
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frappe-column-name-surprises-no-consistent-mapping-from-field-label-to-db-column" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frappe column-name surprises (no consistent mapping from field label to DB column)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-failed-query-poisons-the-transaction-until-you-call-frappedbrollback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A failed query poisons the transaction until you call frappe.db.rollback()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#console-writes-need-an-explicit-frappedbcommit-to-persist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Console writes need an explicit frappe.db.commit() to persist
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-the-query-builder-when-you-can" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use the query builder when you can
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#indexes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indexes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migrations-schema-sync" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migrations &amp; schema sync
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-co-authoring-three-artifacts-must-agree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migration co-authoring — three artifacts must agree
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Migration co-authoring — three artifacts must agree">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hard-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hard rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#canonical-patch-skeleton" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Canonical patch skeleton
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#patchestxt-section-headers-are-mandatory-l-058" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        patches.txt — section headers are mandatory (L-058)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#patches-reading-from-dropped-legacy-columns-need-has_column-guards-l-059" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Patches reading from dropped legacy columns need has_column guards (L-059)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reviewer-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reviewer rule
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backups-and-restore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backups and restore
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connection-tuning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connection tuning
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#locking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Locking
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Locking">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#for-update-skip-locked-for-parallel-workers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FOR UPDATE SKIP LOCKED for parallel workers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-atomic-claim-pattern-project-canonical" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The atomic-claim pattern (project canonical)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#race-tolerant-counter-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Race-tolerant counter updates
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vacuum-and-analyze" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vacuum and analyze
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#debugging-slow-queries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Debugging slow queries
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dont-reach-for-these" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Don't reach for these
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe testing skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#quick-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick rule
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-differences-that-bite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The differences that bite
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The differences that bite">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#identifier-quoting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Identifier quoting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ifnull-isnull-coalesce" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IFNULL / ISNULL → COALESCE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#group_concat-string_agg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GROUP_CONCAT → STRING_AGG
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#date-math" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Date math
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limit-x-y-limit-y-offset-x" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LIMIT x, y → LIMIT y OFFSET x
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#case-sensitivity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Case sensitivity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#boolean" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Boolean
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#select-row_count-does-not-exist-on-pg" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SELECT ROW_COUNT() does not exist on PG
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#where-col-in-s-where-col-anys-and-the-frappe-modify_values-gotcha" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WHERE col IN %s → WHERE col = ANY(%s) (and the Frappe modify_values gotcha)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#on-duplicate-key-update-on-conflict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ON DUPLICATE KEY UPDATE → ON CONFLICT
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#full-text-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full-text search
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#json-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JSON fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#postgres-string-functions-on-json-columns-need-an-explicit-text-cast" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Postgres string functions on JSON columns need an explicit ::text cast
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frappe-column-name-surprises-no-consistent-mapping-from-field-label-to-db-column" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frappe column-name surprises (no consistent mapping from field label to DB column)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a-failed-query-poisons-the-transaction-until-you-call-frappedbrollback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A failed query poisons the transaction until you call frappe.db.rollback()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#console-writes-need-an-explicit-frappedbcommit-to-persist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Console writes need an explicit frappe.db.commit() to persist
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-the-query-builder-when-you-can" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use the query builder when you can
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#indexes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Indexes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migrations-schema-sync" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migrations &amp; schema sync
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-co-authoring-three-artifacts-must-agree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migration co-authoring — three artifacts must agree
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Migration co-authoring — three artifacts must agree">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hard-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hard rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#canonical-patch-skeleton" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Canonical patch skeleton
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#patchestxt-section-headers-are-mandatory-l-058" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        patches.txt — section headers are mandatory (L-058)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#patches-reading-from-dropped-legacy-columns-need-has_column-guards-l-059" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Patches reading from dropped legacy columns need has_column guards (L-059)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reviewer-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reviewer rule
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backups-and-restore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backups and restore
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connection-tuning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connection tuning
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#locking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Locking
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Locking">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#for-update-skip-locked-for-parallel-workers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FOR UPDATE SKIP LOCKED for parallel workers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-atomic-claim-pattern-project-canonical" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The atomic-claim pattern (project canonical)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#race-tolerant-counter-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Race-tolerant counter updates
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vacuum-and-analyze" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vacuum and analyze
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#debugging-slow-queries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Debugging slow queries
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dont-reach-for-these" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Don't reach for these
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="frappe-postgresql-skill">Frappe + PostgreSQL skill</h1>
+<p>Frappe was born MariaDB-first; Postgres support landed later and is fully functional but riddled with small differences. Most Frappe code runs the same; raw SQL and a handful of operations don't.</p>
+<h2 id="quick-rule">Quick rule</h2>
+<p>Whenever you write SQL, ask: would this work on Postgres? Most copy-pasted Frappe ERPNext SQL was written against MariaDB and will quietly fail or behave differently on PG.</p>
+<h2 id="the-differences-that-bite">The differences that bite</h2>
+<h3 id="identifier-quoting">Identifier quoting</h3>
+<p>MariaDB uses backticks: <code>`tabCourse`</code>. Postgres uses double quotes: <code>"tabCourse"</code>. Frappe's <code>frappe.db.sql</code> translates backticks at runtime, but only inside the bare query string — not inside dynamically built fragments or stored procedures. If you see <code>psycopg2.errors.SyntaxError: syntax error at or near "</code>"`, that's a backtick that didn't get translated.</p>
+<p>Safer: write idiomatic Postgres SQL with <code>"..."</code> quoting and let <code>frappe.db.sql</code> pass it through, OR use the query builder (<code>frappe.qb</code>) which is dialect-aware.</p>
+<h3 id="ifnull-isnull-coalesce"><code>IFNULL</code> / <code>ISNULL</code> → <code>COALESCE</code></h3>
+<pre><code class="language-sql">-- Bad on PG
+SELECT IFNULL(grade, 0) FROM &quot;tabAttempt&quot;;
+-- Good
+SELECT COALESCE(grade, 0) FROM &quot;tabAttempt&quot;;
+</code></pre>
+<h3 id="group_concat-string_agg"><code>GROUP_CONCAT</code> → <code>STRING_AGG</code></h3>
+<pre><code class="language-sql">-- MariaDB
+SELECT GROUP_CONCAT(student SEPARATOR ', ') FROM &quot;tabCourse Enrollment&quot;;
+-- Postgres
+SELECT STRING_AGG(student, ', ') FROM &quot;tabCourse Enrollment&quot;;
+</code></pre>
+<h3 id="date-math">Date math</h3>
+<p><code>DATE_ADD(d, INTERVAL 1 DAY)</code> is MariaDB. PG: <code>d + INTERVAL '1 day'</code> or <code>d + 1</code> for date types. <code>DATEDIFF(a, b)</code> becomes <code>(a::date - b::date)</code>. <code>NOW()</code> works both places; <code>CURDATE()</code> is MariaDB-only — use <code>CURRENT_DATE</code>.</p>
+<h3 id="limit-x-y-limit-y-offset-x"><code>LIMIT x, y</code> → <code>LIMIT y OFFSET x</code></h3>
+<p>PG doesn't accept the two-argument form.</p>
+<h3 id="case-sensitivity">Case sensitivity</h3>
+<p>PG is case-sensitive on identifiers and on string comparisons. <code>WHERE email = 'Foo@Bar.com'</code> won't match <code>foo@bar.com</code> rows. Use <code>ILIKE</code> or <code>LOWER(email) = LOWER(...)</code> and put a functional index on <code>LOWER(email)</code> if you query that way.</p>
+<h3 id="boolean">Boolean</h3>
+<p>PG has a real <code>BOOLEAN</code> type; MariaDB uses <code>TINYINT(1)</code>. Frappe's <code>Check</code> field maps to <code>int</code> on both — your queries should compare <code>flag = 1</code>, not <code>flag = TRUE</code>, to stay portable.</p>
+<h3 id="select-row_count-does-not-exist-on-pg"><code>SELECT ROW_COUNT()</code> does not exist on PG</h3>
+<p>MariaDB has a session-level <code>ROW_COUNT()</code> you can <code>SELECT</code> after an UPDATE/DELETE to count affected rows. Postgres does <strong>not</strong> — that query errors out (or, worse on Frappe, returns nothing useful). Two correct alternatives:</p>
+<pre><code class="language-python"># Option A — RETURNING (preferred for UPDATE-claim patterns)
+claimed = frappe.db.sql(&quot;&quot;&quot;
+    UPDATE &quot;tabProgramEnrollment&quot;
+       SET journey_label = %s
+     WHERE name = %s AND journey_label = %s
+     RETURNING name
+&quot;&quot;&quot;, (new_label, pe_name, expected_label))
+if not claimed:
+    return  # 0 rows = somebody else already moved it
+
+# Option B — cursor.rowcount when RETURNING isn't ergonomic
+n = frappe.db.sql(&quot;UPDATE ... WHERE ...&quot;, values)
+# frappe.db._cursor.rowcount has the count; usually you want RETURNING instead.
+</code></pre>
+<p>Lesson L-001. Single highest-consequence MariaDB-ism on this project — silently broke an atomic claim in production-bound code (CR-2026-05-10 #B1). When you see <code>SELECT ROW_COUNT()</code> in any patch or controller, treat it as BLOCKING.</p>
+<h3 id="where-col-in-s-where-col-anys-and-the-frappe-modify_values-gotcha"><code>WHERE col IN %s</code> → <code>WHERE col = ANY(%s)</code> (and the Frappe <code>modify_values</code> gotcha)</h3>
+<p>The <code>IN %s</code> form with a tuple parameter is a MariaDB/psycopg trick that doesn't always survive on PG (and will silently behave wrong on empty tuples). Use <code>= ANY(%s)</code> with a Python <strong>list</strong> for portable, robust PG SQL:</p>
+<pre><code class="language-python"># Bad
+frappe.db.sql(&quot;SELECT name FROM \&quot;tabFoo\&quot; WHERE state IN %s&quot;, ((&quot;a&quot;, &quot;b&quot;, &quot;c&quot;),))
+
+# Good
+frappe.db.sql(&quot;SELECT name FROM \&quot;tabFoo\&quot; WHERE state = ANY(%s)&quot;, ([&quot;a&quot;, &quot;b&quot;, &quot;c&quot;],))
+</code></pre>
+<p>Lesson L-005.</p>
+<p><strong>Common second-order trap (recurred 3× — pe_dispatcher → migration patch → next patch):</strong> Frappe's <code>frappe.db.sql</code> runs the params through <code>modify_values()</code>, which wraps a single-item <code>(list,)</code> tuple oddly. If you write <code>frappe.db.sql("... = ANY(%s::text[])", (legacy_names,))</code> you'll get <code>op ANY/ALL (array) requires array on right side</code> or <code>malformed array literal</code> at runtime — the tuple-around-list becomes a Postgres composite, not an array. <strong>Pick one of these two safe forms and don't mix them:</strong></p>
+<pre><code class="language-python"># Form A — `= ANY(%s)` with a bare list (NOT a tuple wrapping a list)
+frappe.db.sql(
+    'SELECT name FROM &quot;tabFoo&quot; WHERE state = ANY(%s)',
+    ([s for s in states],),       # ← this is the one place the (list,) wrapping is correct
+)
+# Note: psycopg2 needs the outer tuple as the params iterable. The inner is the actual list.
+# In practice, prefer Form B for migration patches — it avoids the cognitive load.
+
+# Form B — `IN %s` with `tuple(list)` (Frappe's canonical Postgres-safe pattern)
+frappe.db.sql(
+    'UPDATE &quot;tabPGCollection&quot; SET is_active = 0 WHERE parent IN %s',
+    (tuple(legacy_bpr_names),),
+)
+</code></pre>
+<p>The recurrence (CR-2026-05-15 C1, fixed in commit 561bb5c) was specifically a migration patch that copied the <code>= ANY(%s::text[])</code> shape from an in-line comment but passed <code>(list,)</code> and got the modify_values mangling. <strong>Code-reviewer rule:</strong> whenever you see <code>ANY(%s)</code> or <code>ANY(%s::text[])</code> in raw SQL, immediately check the param shape — if it's <code>(some_list,)</code> where <code>some_list</code> is a Python list of strings/ints, it will fail at runtime. Prefer <code>IN %s</code> + <code>tuple(list)</code> for migration patches.</p>
+<h3 id="on-duplicate-key-update-on-conflict"><code>ON DUPLICATE KEY UPDATE</code> → <code>ON CONFLICT</code></h3>
+<pre><code class="language-sql">-- PG upsert
+INSERT INTO &quot;tabLesson Progress&quot; (name, status)
+VALUES (%s, %s)
+ON CONFLICT (name) DO UPDATE SET status = EXCLUDED.status;
+</code></pre>
+<h3 id="full-text-search">Full-text search</h3>
+<p>Frappe's <code>LIKE '%foo%'</code> works but is slow. PG has <code>to_tsvector</code> / <code>to_tsquery</code> and GIN indexes — much faster for text search. Frappe's global search uses its own table (<code>__global_search</code>) and works the same on either backend, so prefer it over hand-rolled LIKE queries when possible.</p>
+<h3 id="json-fields">JSON fields</h3>
+<p>Frappe <code>JSON</code> fieldtype is stored as <code>text</code> historically, not <code>jsonb</code>. If you need to query into JSON values, you currently have to cast: <code>(value::jsonb-&gt;&gt;'key')</code>. Add a generated column or a separate indexed column if you query the same JSON path repeatedly.</p>
+<p>If you want a <strong>GIN index</strong> on the JSON (for <code>@&gt;</code>, <code>?</code>, key-existence queries), the column itself must be real <code>jsonb</code>, not text. Convert via patch:</p>
+<pre><code class="language-python">def execute():
+    frappe.db.sql_ddl(&quot;&quot;&quot;
+        ALTER TABLE &quot;tabProgramEventLog&quot;
+        ALTER COLUMN details TYPE jsonb USING details::jsonb;
+    &quot;&quot;&quot;)
+    frappe.db.sql_ddl(&quot;&quot;&quot;
+        CREATE INDEX IF NOT EXISTS idx_eventlog_details
+        ON &quot;tabProgramEventLog&quot; USING GIN (details);
+    &quot;&quot;&quot;)
+</code></pre>
+<p>Lesson L-006. Without the <code>USING details::jsonb</code> cast clause, ALTER fails on rows with non-trivial content.</p>
+<h3 id="postgres-string-functions-on-json-columns-need-an-explicit-text-cast">Postgres string functions on JSON columns need an explicit <code>::text</code> cast</h3>
+<pre><code class="language-sql">-- WORKS
+SELECT LEFT(details::text, 200) FROM &quot;tabProgramEventLog&quot;;
+SELECT * FROM &quot;tabError Log&quot; WHERE error::text LIKE '%foo%';
+
+-- FAILS — `function left(json, integer) does not exist`
+SELECT LEFT(details, 200) FROM &quot;tabProgramEventLog&quot;;
+SELECT * FROM &quot;tabError Log&quot; WHERE error LIKE '%foo%';
+</code></pre>
+<p>Affects <code>ProgramEventLog.details</code>, <code>Submission.feedback</code>, <code>Error Log.error</code>, and any column declared as <code>Code (JSON)</code> in DocType JSON. Lesson L-051.</p>
+<h3 id="frappe-column-name-surprises-no-consistent-mapping-from-field-label-to-db-column">Frappe column-name surprises (no consistent mapping from field label to DB column)</h3>
+<table>
+<thead>
+<tr>
+<th>DocType</th>
+<th>Field label / what you think it's called</th>
+<th>Real Postgres column</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Error Log</td>
+<td>"Title" / what <code>log_error(title=...)</code> takes</td>
+<td><code>method</code></td>
+<td>The kwarg is <code>title=</code>, the column is <code>method</code>. Both are correct — Frappe maps title→method internally. Query with <code>WHERE method LIKE 'SP %'</code>.</td>
+</tr>
+<tr>
+<td>Error Log</td>
+<td>"Error" / "Message" / the long body</td>
+<td><code>error</code></td>
+<td>Not <code>message</code>. And it's JSON-typed (see above).</td>
+</tr>
+<tr>
+<td>ProgramEventLog</td>
+<td>The PE foreign key</td>
+<td><code>enrollment</code></td>
+<td>NOT <code>program_enrollment</code> despite the convention used elsewhere. Hit during 2026-05-26 diagnostics.</td>
+</tr>
+</tbody>
+</table>
+<p>Rule: when raw SQL against a Frappe doctype errors with <code>column "X" does not exist</code>, do NOT assume the field is misnamed — check the actual schema first:</p>
+<pre><code class="language-sql">SELECT column_name FROM information_schema.columns
+ WHERE table_name = 'tabError Log' AND table_schema = 'public'
+ ORDER BY ordinal_position;
+</code></pre>
+<h3 id="a-failed-query-poisons-the-transaction-until-you-call-frappedbrollback">A failed query poisons the transaction until you call <code>frappe.db.rollback()</code></h3>
+<p>Unlike MariaDB (autocommits) PG enters an aborted-transaction state on the first failed statement. EVERY subsequent statement in the same txn errors with <code>InFailedSqlTransaction: current transaction is aborted, commands ignored until end of transaction block</code>. Two implications:</p>
+<ol>
+<li><strong>In <code>bench console</code></strong>, wrap risky probes or start each cell with <code>frappe.db.rollback()</code>. The corollary is that <code>sp_console</code> helpers all begin with that call.</li>
+<li><strong>In exception handlers that call <code>frappe.log_error</code></strong>, rollback BEFORE log_error. <code>frappe.log_error</code> does its own SELECT to fetch the Error Log doctype meta; without the rollback that SELECT itself fails and you lose the entire error report.</li>
+</ol>
+<pre><code class="language-python">try:
+    frappe.db.sql(&quot;...risky SQL...&quot;)
+except Exception as e:
+    try:
+        frappe.db.rollback()    # ← clear the poisoned txn FIRST
+    except Exception:
+        pass
+    frappe.log_error(f&quot;failed: {e}&quot;, &quot;My App&quot;)    # now this actually works
+    raise   # in an RQ job, ALWAYS re-raise (see frappe-hooks skill)
+</code></pre>
+<p>Lesson L-030. Documented in CLAUDE.md as a project-level gotcha.</p>
+<h3 id="console-writes-need-an-explicit-frappedbcommit-to-persist">Console writes need an explicit <code>frappe.db.commit()</code> to persist</h3>
+<p>IPython console runs everything in one implicit transaction. If a later cell errors and you call <code>frappe.db.rollback()</code>, all uncommitted writes from EARLIER cells (including <code>frappe.log_error</code> inserts and <code>frappe.db.set_value</code> updates) get wiped along with the poisoned txn. After diagnostics that depend on side effects (event log entries, prospect_id cache writes), call <code>frappe.db.commit()</code> before any subsequent query that could fail.</p>
+<h2 id="use-the-query-builder-when-you-can">Use the query builder when you can</h2>
+<p><code>frappe.qb</code> (PyPika under the hood) emits dialect-correct SQL for both backends:</p>
+<pre><code class="language-python">from frappe.query_builder import DocType
+from frappe.query_builder.functions import Coalesce, Count
+
+Enrollment = DocType(&quot;Course Enrollment&quot;)
+Course = DocType(&quot;Course&quot;)
+
+q = (
+    frappe.qb.from_(Enrollment)
+    .left_join(Course).on(Enrollment.course == Course.name)
+    .select(Course.title, Count(Enrollment.name).as_(&quot;enrollments&quot;))
+    .where(Enrollment.status == &quot;Active&quot;)
+    .groupby(Course.title)
+    .orderby(Count(Enrollment.name), order=frappe.qb.desc)
+)
+rows = q.run(as_dict=True)
+</code></pre>
+<p>This is the strongly-recommended default for non-trivial queries.</p>
+<h2 id="indexes">Indexes</h2>
+<p>Frappe creates indexes on Link fields and on fields with <code>index: 1</code> in the JSON. After adding <code>index: 1</code>, run <code>bench migrate</code> — Frappe will issue <code>CREATE INDEX</code> against PG.</p>
+<p>For composite indexes or partial indexes (PG-only feature, very useful), use a patch:</p>
+<pre><code class="language-python"># app/&lt;your_app&gt;/patches/v1_0/add_active_enrollment_index.py
+import frappe
+
+def execute():
+    frappe.db.sql_ddl(
+        'CREATE INDEX IF NOT EXISTS idx_active_enrollment '
+        'ON &quot;tabCourse Enrollment&quot; (student, course) '
+        'WHERE status = \'Active\';'
+    )
+</code></pre>
+<p>Register the patch in <code>app/&lt;your_app&gt;/patches.txt</code> so <code>bench migrate</code> picks it up.</p>
+<h2 id="migrations-schema-sync">Migrations &amp; schema sync</h2>
+<p><code>bench migrate</code> runs <code>frappe.model.sync.sync_for("&lt;app&gt;")</code> which diffs the DocType JSON against the live PG schema and issues <code>ALTER TABLE</code> statements. Watch for:</p>
+<ul>
+<li>Renaming a field doesn't auto-rename the column. You need a patch that runs <code>frappe.db.rename_column</code> (or hand-rolled <code>ALTER TABLE ... RENAME COLUMN</code>).</li>
+<li>Changing a field's <code>fieldtype</code> may require a <code>USING</code> clause for PG to coerce existing data. Frappe tries; sometimes you must intervene.</li>
+<li>Dropping a field doesn't drop the column by default — Frappe leaves it for safety. Use <code>DROP COLUMN</code> in a patch if you really want it gone.</li>
+</ul>
+<h2 id="migration-co-authoring-three-artifacts-must-agree">Migration co-authoring — three artifacts must agree</h2>
+<p>When you add a new column to a doctype, three artifacts must be edited
+in the same change set. Edit two but not the third and <code>bench migrate</code>
+fails at the worst possible moment (production deploy, freshly cloned
+site, CI restore). The CR-005 <code>PGCollection.kind</code> incident shipped
+broken twice (2026-05-15) because of this exact mismatch.</p>
+<table>
+<thead>
+<tr>
+<th>Artifact</th>
+<th>What it controls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;doctype&gt;.json</code></td>
+<td>Whether the column exists in the schema after <code>bench migrate</code></td>
+</tr>
+<tr>
+<td>Patch in <code>patches/v0_X/*.py</code></td>
+<td>What backfill / SQL writes run against the new column</td>
+</tr>
+<tr>
+<td><code>patches.txt</code></td>
+<td>The ORDERING — whether the patch runs pre or post <code>[post_model_sync]</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="hard-rules">Hard rules</h3>
+<ol>
+<li>
+<p><strong>Every patch that references a new column should call
+   <code>frappe.reload_doc("&lt;app&gt;", "doctype", "&lt;doctype&gt;")</code> at the top.</strong> This
+   forces the DocType JSON to apply (creating the column if missing)
+   BEFORE the patch body runs. Idempotent and cheap. See
+   <code>app/tap_lms/patches/v0_2/backfill_pg_collection_kinds.py</code> and
+   <code>app/tap_lms/patches/v0_2/add_pe_glific_id_unique_index.py</code> for the
+   canonical pattern.</p>
+</li>
+<li>
+<p><strong><code>frappe.db.rollback()</code> at the very top of every patch.</strong> Clears any
+   poisoned transaction state from earlier patches in the chain. Without
+   this, a single upstream failure cascades through every subsequent
+   patch with <code>current transaction is aborted, commands ignored until end
+   of transaction block</code>.</p>
+</li>
+<li>
+<p><strong>Use <code>IF NOT EXISTS</code> on every CREATE INDEX / CREATE TABLE.</strong> Patches
+   are idempotent by Frappe convention (L-021) — re-running on a partially-
+   migrated DB must be a no-op, never a "duplicate object" error.</p>
+</li>
+</ol>
+<h3 id="canonical-patch-skeleton">Canonical patch skeleton</h3>
+<pre><code class="language-python">&quot;&quot;&quot;
+&lt;purpose, 1-3 lines&gt;
+&quot;&quot;&quot;
+import frappe
+
+
+def execute():
+    # PG txn hygiene — clear any poisoned txn state from prior patches.
+    frappe.db.rollback()
+
+    # Self-heal: force the doctype JSON to sync so columns we reference
+    # are guaranteed live before our SQL runs. Idempotent + cheap.
+    frappe.reload_doc(&quot;tap_lms&quot;, &quot;doctype&quot;, &quot;&lt;doctype&gt;&quot;)
+
+    # Actual migration work — use IF NOT EXISTS for DDL idempotency.
+    frappe.db.sql(&quot;&quot;&quot;
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_foo
+            ON &quot;tabBar&quot; (some_col)
+         WHERE some_col IS NOT NULL
+    &quot;&quot;&quot;)
+    frappe.db.commit()
+
+    frappe.logger().info(&quot;patch_foo: ...&quot;)
+</code></pre>
+<h3 id="patchestxt-section-headers-are-mandatory-l-058">patches.txt — section headers are mandatory (L-058)</h3>
+<p>Frappe's patch loader uses <code>configparser</code> to read <code>patches.txt</code> and runs
+two distinct phases:</p>
+<ol>
+<li><code>pre_model_sync</code> — patches that need to run BEFORE the doctype sync
+   (rare; mostly for cleanup that the schema sync would otherwise stumble on)</li>
+<li><code>sync_doctypes()</code> — creates/alters all doctype tables</li>
+<li><code>post_model_sync</code> — patches that need to run AFTER the tables exist
+   (the common case for tap_lms — every patch references SP doctype tables)</li>
+</ol>
+<p><strong>Required shape — both section headers, even if one is empty:</strong></p>
+<pre><code class="language-ini">[pre_model_sync]
+
+[post_model_sync]
+tap_lms.patches.cr_004_scale.idx_pe_next_action
+tap_lms.patches.cr_004_batch_id_unique.batch_id_unique_constraint
+tap_lms.patches.v0_2.backfill_pg_collection_kinds
+...
+</code></pre>
+<p><strong>Common failure modes:</strong></p>
+<table>
+<thead>
+<tr>
+<th>If patches.txt has...</th>
+<th>Frappe behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No section headers at all</td>
+<td>All patches default to <code>pre_model_sync</code> → run BEFORE tables exist → fail with <code>UndefinedTable</code> on fresh installs</td>
+</tr>
+<tr>
+<td>Only <code>[post_model_sync]</code></td>
+<td>Loader queries <code>[pre_model_sync]</code> first, can't find it → <code>ValidationError: Patch type PatchType.pre_model_sync not found in patches.txt</code></td>
+</tr>
+<tr>
+<td>Only <code>[pre_model_sync]</code></td>
+<td>Same as above but mirrored — fails when post_model_sync query happens</td>
+</tr>
+<tr>
+<td>Both headers, empty pre_model_sync</td>
+<td>✅ Works</td>
+</tr>
+<tr>
+<td>Both headers populated correctly</td>
+<td>✅ Works</td>
+</tr>
+</tbody>
+</table>
+<p>We hit this on 2026-05-30 during the prod first-install. On migration deploys
+the bug is invisible because the tables already exist from earlier migrates;
+on fresh installs every patch fails.</p>
+<h3 id="patches-reading-from-dropped-legacy-columns-need-has_column-guards-l-059">Patches reading from dropped legacy columns need <code>has_column</code> guards (L-059)</h3>
+<p>When a CR drops a column from a doctype's JSON AND the same CR includes a
+backfill patch that reads from that column for the migration path, the
+patch must guard the read:</p>
+<pre><code class="language-python">def execute():
+    # On migration deploys, the legacy column still exists in PG
+    # (Frappe doesn't auto-drop columns when a field is removed from JSON).
+    # On fresh installs, the column was never created.
+    if frappe.db.has_column(&quot;tabEscalationStep&quot;, &quot;message_type&quot;):
+        backfilled = frappe.db.sql(&quot;&quot;&quot;
+            UPDATE &quot;tabEscalationStep&quot;
+               SET escalation_type = CASE
+                       WHEN message_type = 'help_note_a' THEN 'help_note_a'
+                       ...
+                   END
+             WHERE escalation_type IS NULL OR escalation_type = ''
+            RETURNING name
+        &quot;&quot;&quot;)
+        backfill_count = len(backfilled or [])
+    else:
+        backfill_count = 0   # fresh install — nothing to backfill
+</code></pre>
+<p>Without the guard, the patch fails on fresh installs with
+<code>psycopg2.errors.UndefinedColumn: column "message_type" does not exist</code>.</p>
+<p>Hit 2026-05-30 in <code>cr_003.per_week_grace_and_channels</code> Step 1 against
+<code>tabEscalationStep.message_type</code>. The patch was unblocked by manually
+inserting a Patch Log entry (Step 1 was a no-op on the empty fresh table
+anyway); the source-tree fix added the guard.</p>
+<h3 id="reviewer-rule">Reviewer rule</h3>
+<p>When reviewing a new patch, verify:
+- [ ] <code>frappe.db.rollback()</code> at the top
+- [ ] <code>frappe.reload_doc(...)</code> if any column referenced is newly added
+- [ ] <code>IF NOT EXISTS</code> on all CREATE statements
+- [ ] Idempotent on re-run (no errors, no duplicate side effects)
+- [ ] Listed in patches.txt under <code>[post_model_sync]</code> (not above any header)
+- [ ] <code>patches.txt</code> has BOTH <code>[pre_model_sync]</code> and <code>[post_model_sync]</code> section headers (L-058)
+- [ ] Reads from LEGACY columns (being dropped in the same CR) are guarded with <code>frappe.db.has_column(table, col)</code> (L-059)
+- [ ] DocType JSON has the column the patch reads/writes — if not, the
+  patch is shipping ahead of the schema and will fail
+  on a fresh install</p>
+<h2 id="backups-and-restore">Backups and restore</h2>
+<pre><code class="language-bash"># Backup
+bench --site &lt;site&gt; backup --with-files
+# This produces SQL dumps via pg_dump under the hood.
+
+# Manual backup of just the DB
+pg_dump -U &lt;db_user&gt; -h 127.0.0.1 -d &lt;db_name&gt; -F c -f /tmp/site.dump
+
+# Restore
+pg_restore -U &lt;db_user&gt; -h 127.0.0.1 -d &lt;db_name&gt; --clean /tmp/site.dump
+</code></pre>
+<p><code>bench restore &lt;sql_path&gt;</code> works for <code>.sql.gz</code> dumps produced by Frappe; if you've taken a custom <code>pg_dump</code>, restore with <code>pg_restore</code> directly.</p>
+<h2 id="connection-tuning">Connection tuning</h2>
+<p>In <code>common_site_config.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;db_type&quot;: &quot;postgres&quot;,
+  &quot;db_host&quot;: &quot;127.0.0.1&quot;,
+  &quot;db_port&quot;: 5432,
+  &quot;rds_db&quot;: 0
+}
+</code></pre>
+<p>Per-site DB credentials in <code>sites/&lt;site&gt;/site_config.json</code>. Production: bump <code>max_connections</code> (PG default 100 is too low if you run multiple workers + gunicorn) and ensure <code>shared_buffers</code> is at least 25% of RAM.</p>
+<h2 id="locking">Locking</h2>
+<p>Frappe acquires advisory locks via <code>frappe.db.get_value(..., for_update=True)</code> which translates to <code>SELECT ... FOR UPDATE</code>. Hold these locks for as little time as possible — in PG, a long-held row lock can block migrations and other writers.</p>
+<h3 id="for-update-skip-locked-for-parallel-workers"><code>FOR UPDATE SKIP LOCKED</code> for parallel workers</h3>
+<p>PG-specific (not in MariaDB until 8.0+, and even there with caveats). The right primitive for parallel scheduler tick handlers that want to grab the next batch without blocking on rows another worker already holds:</p>
+<pre><code class="language-sql">SELECT name, next_action_type, journey_label
+  FROM &quot;tabProgramEnrollment&quot;
+ WHERE next_action_at &lt;= NOW()
+   AND next_action_at IS NOT NULL
+   AND program_status = 'active'
+ ORDER BY next_action_at
+ LIMIT 1000
+ FOR UPDATE SKIP LOCKED;
+</code></pre>
+<p>Lesson L-003. See also pattern P-003 (per-PE event-driven scheduler tick) for the full shape.</p>
+<h2 id="the-atomic-claim-pattern-project-canonical">The atomic-claim pattern (project canonical)</h2>
+<p>Every state-changing UPDATE on <code>ProgramEnrollment</code> (or any state-machine doc) must include a <code>WHERE journey_label = expected_label</code> guard plus <code>RETURNING name</code>, and check the result. 0 rows returned = a parallel handler already moved the state, skip gracefully. This is the project's idempotency primitive — pattern P-001 in <code>.claude/memory/patterns.md</code>.</p>
+<pre><code class="language-python">claimed = frappe.db.sql(&quot;&quot;&quot;
+    UPDATE &quot;tabProgramEnrollment&quot;
+       SET resolved_flow_state = %s,
+           journey_label       = %s,
+           next_action_at      = %s,
+           next_action_type    = %s
+     WHERE name          = %s
+       AND journey_label = %s         -- ← idempotency guard
+     RETURNING name
+&quot;&quot;&quot;, (new_state, new_label, next_at, next_type, pe_name, expected_label))
+
+if not claimed:
+    return                    # parallel handler already moved state
+</code></pre>
+<p>Anti-patterns to flag in review:</p>
+<ul>
+<li>A broad <code>except Exception:</code> block wrapping the UPDATE with a "MariaDB fallback" branch — that's dead code on this PG-only project, swallows real errors, and risks double-running. Remove it (lesson L-007).</li>
+<li><code>SELECT ROW_COUNT()</code> instead of <code>RETURNING</code> — see above, L-001.</li>
+<li>Using <code>pe = frappe.get_doc(...); pe.field += x; pe.save()</code> for fields that race against scheduler resets — use the COALESCE-update form (pattern P-002) instead.</li>
+</ul>
+<h2 id="race-tolerant-counter-updates">Race-tolerant counter updates</h2>
+<p>For columns that can be reset (e.g., <code>weekly_*</code> fields T14 zeros out) or incremented from multiple handlers, never read-then-write. Use a single atomic UPDATE with <code>COALESCE</code>:</p>
+<pre><code class="language-sql">UPDATE &quot;tabProgramEnrollment&quot;
+   SET total_quiz_points  = COALESCE(total_quiz_points, 0)  + %s,
+       weekly_quiz_points = COALESCE(weekly_quiz_points, 0) + %s
+ WHERE name = %s
+</code></pre>
+<p>Lesson L-011, pattern P-002.</p>
+<h2 id="vacuum-and-analyze">Vacuum and analyze</h2>
+<p>PG's autovacuum handles most cases, but after a big migration or bulk import, run <code>VACUUM ANALYZE</code> on the affected tables manually to refresh statistics. The query planner uses these stats; stale stats produce sequential scans on tables that have indexes.</p>
+<pre><code class="language-bash">psql -U &lt;db_user&gt; -d &lt;db_name&gt; -c 'VACUUM ANALYZE &quot;tabCourse Enrollment&quot;;'
+</code></pre>
+<h2 id="debugging-slow-queries">Debugging slow queries</h2>
+<pre><code class="language-sql">EXPLAIN (ANALYZE, BUFFERS) SELECT ... ;
+</code></pre>
+<p>Look for <code>Seq Scan</code> on big tables — usually means a missing index or a planner issue. PG has a richer EXPLAIN output than MariaDB; learn to read it.</p>
+<h2 id="dont-reach-for-these">Don't reach for these</h2>
+<ul>
+<li>Stored procedures and triggers in PG — Frappe's framework expects logic in Python controllers, not in the DB. You'll create maintenance pain and confuse the migration path.</li>
+<li><code>pg_partman</code> partitioning — works, but Frappe's ORM doesn't know about partitions and you'll get surprises in <code>frappe.get_all</code>.</li>
+<li>Foreign key constraints beyond what Frappe creates — Frappe enforces relationships in Python, not at the DB level. Adding raw FKs can break delete operations.</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

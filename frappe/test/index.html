@@ -1,0 +1,1572 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Write, run, or fix tests for a Frappe app. Trigger whenever the user mentions tests, testing, unit test, integration test, fixtures, mocks, "make sure this doesn't break", coverage, CI, or asks to verify a feature works. Also trigger when fixing flaky tests, setting up the test runner, or moving from manual QA to automated tests. The TAP LMS test stack defaults to Frappe's built-in unittest runner; pytest can be added later.">
+      
+      
+      
+      
+        <link rel="prev" href="../postgres/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Frappe testing skill - claude-cowork-code — Team Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#frappe-testing-skill" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="claude-cowork-code — Team Guide" class="md-header__button md-logo" aria-label="claude-cowork-code — Team Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            claude-cowork-code — Team Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Frappe testing skill
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="claude-cowork-code — Team Guide" class="md-nav__button md-logo" aria-label="claude-cowork-code — Team Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    claude-cowork-code — Team Guide
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to use claude-cowork-code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adopt-for-new-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adopt it for a new project
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adopt-frappe-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adopt it for a new Frappe app
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../engineering-playbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engineering playbook — CR → build → release
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../methodology/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Methodology — why it's built this way
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../product-playbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product playbook — idea → BR / PRD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../publishing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Publishing the guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Frappe
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe reference skills
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe API skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bench/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe bench skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../client-script/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe client script skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe controller skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../doctype/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe DocType skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe hooks.py skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../postgres/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe + PostgreSQL skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe testing skill
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe testing skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#tests-are-part-of-the-feature-not-a-follow-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tests are part of the feature, not a follow-up
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tests are part of the feature, not a follow-up">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-category-of-test-applies-5-line-decision-tree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What category of test applies — 5-line decision tree
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#before-moving-refactoring-an-existing-function-check-its-failure-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Before moving / refactoring an existing function — check its failure history
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-tests-live" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where tests live
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anatomy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anatomy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#frappes-quality-of-life-helpers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frappe's quality-of-life helpers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project-test-factories-use-these-dont-reinvent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Project test factories — use these, don't reinvent
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Project test factories — use these, don&#39;t reinvent">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-this-exists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this exists
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usage-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hard-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hard rule
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generic-test-data-factories-for-new-modules-without-their-own" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generic test data factories (for new modules without their own)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#user-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User context
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mocking-external-services" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mocking external services
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-about-pytest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What about pytest?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ci-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CI integration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-gotchas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common gotchas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-a-feature-ships" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When a feature ships
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project-specific-test-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Project-specific test rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#tests-are-part-of-the-feature-not-a-follow-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tests are part of the feature, not a follow-up
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tests are part of the feature, not a follow-up">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-category-of-test-applies-5-line-decision-tree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What category of test applies — 5-line decision tree
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#before-moving-refactoring-an-existing-function-check-its-failure-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Before moving / refactoring an existing function — check its failure history
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-tests-live" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where tests live
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anatomy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anatomy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Running tests
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#frappes-quality-of-life-helpers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frappe's quality-of-life helpers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project-test-factories-use-these-dont-reinvent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Project test factories — use these, don't reinvent
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Project test factories — use these, don&#39;t reinvent">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-this-exists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this exists
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usage-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hard-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hard rule
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generic-test-data-factories-for-new-modules-without-their-own" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generic test data factories (for new modules without their own)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#user-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User context
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mocking-external-services" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mocking external services
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-about-pytest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What about pytest?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ci-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CI integration
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-gotchas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common gotchas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-a-feature-ships" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When a feature ships
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project-specific-test-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Project-specific test rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="frappe-testing-skill">Frappe testing skill</h1>
+<p>Frappe ships a unittest-based test runner that bootstraps a fully working site, runs your tests inside a transaction, and rolls back at the end. That last bit is what makes Frappe testing pleasant — every test starts from a clean DB.</p>
+<h2 id="tests-are-part-of-the-feature-not-a-follow-up">Tests are part of the feature, not a follow-up</h2>
+<p>This rule has been violated three times running. Codified now to stop the bleeding (L-025).</p>
+<p><strong>Hard rule:</strong> a function that touches <strong>Glific</strong> (<code>start_contact_flow</code>, <code>start_group_flow</code>, <code>update_contact_fields</code>), <strong>RabbitMQ</strong> (<code>publish</code>, <code>consume</code>), <strong>Google Cloud Storage</strong>, <strong>the database via raw SQL or <code>frappe.db.set_value</code></strong>, or <strong>shared scheduler / cron state</strong> MUST ship with at least one test in the <strong>same commit</strong> as the function. Filing the test as a follow-up task (#21, #41, #53, …) is not acceptable. The bug always lands before the follow-up does, every time.</p>
+<p>This applies to feature-builder handoffs and to code-reviewer's blocking criteria. See <code>.claude/agents/feature-builder.md</code> workflow step "After you finish" and <code>.claude/agents/code-reviewer.md</code> test-coverage section.</p>
+<h3 id="what-category-of-test-applies-5-line-decision-tree">What category of test applies — 5-line decision tree</h3>
+<ol>
+<li><strong>Touches Glific or RabbitMQ or GCS?</strong> → <code>unittest.mock</code> mock + assert call shape AND a fault-injection test that raises and asserts retry/DLQ behavior (L-015).</li>
+<li><strong>Atomic-claim or COALESCE-update SQL (P-001 / P-002)?</strong> → concurrency/race test calling the handler twice and asserting only one side-effect (L-018).</li>
+<li><strong>Scheduler tick / cron path?</strong> → time-controlled test that runs the tick with frozen <code>frappe.utils.now_datetime()</code> and asserts dispatch idempotency.</li>
+<li><strong>Whitelisted endpoint?</strong> → happy-path + validation-error + permission test (L-016).</li>
+<li><strong>Pure CRUD on own DocType?</strong> → one happy-path test is enough; no race or mock needed.</li>
+</ol>
+<p>If the function fits more than one row, it needs tests from each row.</p>
+<p>Recurrence: <code>missing_tests_on_new_api</code> appeared 3x in <code>.claude/memory/code-review-findings.jsonl</code> (commits <code>fca37df</code>, <code>875d6d6</code>, <code>post-875d6d6</code>). Commit <code>875d6d6</code> shipped 10+ new functions (<code>pe_dispatcher</code> 565 lines, 8 handlers, plus <code>feedback_consumer_hook</code>, <code>_seed_pe_actions</code>, <code>check_auto_activate</code>, <code>staggered_action_time</code>) with zero tests. The fix-up commit added 10 tests but left 5 handlers uncovered. The cost is one more BLOCKING review per missed function.</p>
+<h3 id="before-moving-refactoring-an-existing-function-check-its-failure-history">Before moving / refactoring an existing function — check its failure history</h3>
+<p>Beyond the test-coverage checklist for <em>new</em> code, refactors of existing code need a pre-flight check. The pattern that hit us during the 2026-05-28 journey/ → summer_program/ migration: a function had silently-swallowed exceptions for days; the queue diagnostic showed 5 historical failures; the move was performed without investigating; the bug would have followed the file to the new location.</p>
+<p><strong>Hard rule for refactors that relocate or rename a function:</strong> before declaring the move "safe," grep its failure history:</p>
+<pre><code class="language-python"># After loading sp_console (see skills/frappe-bench/SKILL.md console section):
+queue_failures_for(&quot;the_function_name&quot;)
+</code></pre>
+<p>Plus the Error Log doctype:</p>
+<pre><code class="language-python">import frappe; frappe.db.rollback()
+frappe.db.sql(&quot;&quot;&quot;
+    SELECT method, creation, LEFT(error::text, 200) AS excerpt
+      FROM &quot;tabError Log&quot;
+     WHERE error::text LIKE %s
+     ORDER BY creation DESC LIMIT 20
+&quot;&quot;&quot;, (&quot;%the_function_name%&quot;,), as_dict=True)
+</code></pre>
+<p>If either query returns hits, the move becomes a refactor: <strong>fix the root cause inline (the fix-pattern usually already exists elsewhere in the codebase) BEFORE relocating the code</strong>. Don't migrate broken code unchanged; you'll ship the same bug to a new location and a reviewer will catch it later anyway.</p>
+<p>This was L-057-proposed in the 2026-05-26 housekeeping retrospective.</p>
+<h2 id="where-tests-live">Where tests live</h2>
+<pre><code>app/&lt;your_app&gt;/&lt;your_module&gt;/doctype/course_enrollment/test_course_enrollment.py
+app/&lt;your_app&gt;/&lt;your_module&gt;/tests/test_&lt;feature&gt;.py
+</code></pre>
+<p>The <code>test_</code> prefix is required — that's how the runner discovers them. One test file per DocType is conventional; cross-cutting features get their own <code>tests/</code> folder.</p>
+<h2 id="anatomy">Anatomy</h2>
+<pre><code class="language-python">import frappe
+import unittest
+
+class TestCourseEnrollment(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        # Runs once before any test in this class. Use to seed reference data
+        # the whole class shares. Not rolled back automatically — clean up in tearDownClass.
+        cls.student = make_student(&quot;STU-TEST-001&quot;)
+        cls.course = make_course(&quot;CS-TEST-101&quot;)
+
+    def setUp(self):
+        # Runs before each test. Frappe wraps each test in a transaction
+        # that's rolled back, so most setUp work is unneeded.
+        pass
+
+    def test_creates_enrollment(self):
+        doc = frappe.get_doc({
+            &quot;doctype&quot;: &quot;Course Enrollment&quot;,
+            &quot;student&quot;: self.student,
+            &quot;course&quot;: self.course,
+        }).insert()
+        self.assertEqual(doc.status, &quot;Active&quot;)
+        self.assertTrue(frappe.db.exists(&quot;Course Enrollment&quot;, doc.name))
+
+    def test_blocks_duplicate_enrollment(self):
+        frappe.get_doc({
+            &quot;doctype&quot;: &quot;Course Enrollment&quot;,
+            &quot;student&quot;: self.student,
+            &quot;course&quot;: self.course,
+        }).insert()
+        with self.assertRaises(frappe.ValidationError):
+            frappe.get_doc({
+                &quot;doctype&quot;: &quot;Course Enrollment&quot;,
+                &quot;student&quot;: self.student,
+                &quot;course&quot;: self.course,
+            }).insert()
+
+    @classmethod
+    def tearDownClass(cls):
+        # Clean up class-level seed data.
+        for name in frappe.get_all(&quot;Course Enrollment&quot;, filters={&quot;student&quot;: cls.student}, pluck=&quot;name&quot;):
+            frappe.delete_doc(&quot;Course Enrollment&quot;, name, force=True)
+</code></pre>
+<h2 id="running-tests">Running tests</h2>
+<pre><code class="language-bash"># All tests in your app
+bench --site &lt;site&gt; run-tests --app tap_lms
+
+# Single module
+bench --site &lt;site&gt; run-tests --module tap_lms.tap_lms.doctype.course_enrollment.test_course_enrollment
+
+# Single test
+bench --site &lt;site&gt; run-tests --test tap_lms.tap_lms.doctype.course_enrollment.test_course_enrollment.TestCourseEnrollment.test_blocks_duplicate_enrollment
+
+# With coverage
+bench --site &lt;site&gt; run-tests --app tap_lms --coverage
+</code></pre>
+<p>Pass <code>--profile</code> to get per-test timing.</p>
+<h2 id="frappes-quality-of-life-helpers">Frappe's quality-of-life helpers</h2>
+<p><code>frappe.tests.utils.FrappeTestCase</code> (subclass instead of <code>unittest.TestCase</code>) gives you:</p>
+<ul>
+<li><code>self.assertDocumentEqual(expected_dict, doc)</code> — compares meaningful fields.</li>
+<li>Automatic transaction wrapping with rollback on every test.</li>
+<li>A <code>self.client</code> for HTTP-style calls into your whitelisted methods.</li>
+</ul>
+<pre><code class="language-python">from frappe.tests.utils import FrappeTestCase
+
+class TestEnrollAPI(FrappeTestCase):
+    def test_enroll_endpoint(self):
+        result = frappe.call(&quot;tap_lms.api.enroll&quot;, student=&quot;STU-001&quot;, course=&quot;CS101&quot;)
+        self.assertTrue(result[&quot;created&quot;])
+</code></pre>
+<h2 id="project-test-factories-use-these-dont-reinvent">Project test factories — use these, don't reinvent</h2>
+<p>The Summer Program has a canonical factory module at
+<code>app/tap_lms/summer_program/tests/factories.py</code> exposing:</p>
+<ul>
+<li><code>make_batch(label, batch_id, ...)</code> — populates EVERY mandatory field on
+  the Batch doctype (<code>start_date</code>, <code>end_date</code>, <code>regist_start_date</code>,
+  <code>regist_end_date</code>, <code>batch_id</code>, <code>program_type</code>, <code>total_weeks</code>,
+  <code>current_calendar_week</code>, <code>grace_window_days</code>). Pass <code>label</code> (unique per
+  test) and <code>batch_id</code> (the friendly identifier, distinct from the doc
+  name).</li>
+<li><code>make_student(suffix, phone_prefix, glific_id, ...)</code> — populates <code>name1</code>,
+  <code>phone</code>, <code>glific_id</code>, <code>archetype</code>, <code>experiment_arm</code>, <code>language</code>. Each
+  test file should use a unique <code>phone_prefix</code> to keep its students in a
+  disjoint phone space.</li>
+<li><code>make_active_pe(student_id, batch_name, glific_id)</code> — directly inserts
+  a minimal active PE without running <code>_process_pe_chunk</code>. Useful for
+  setting up pre-conditions like "sibling A is already enrolled."</li>
+</ul>
+<h3 id="why-this-exists">Why this exists</h3>
+<p>Each test file inventing its own <code>_ensure_batch()</code> is the recurring
+<strong><code>mandatory_field_missing</code></strong> pattern (4× recurrence between 2026-05-16
+and 2026-05-19). The Batch doctype gained <code>regist_end_date</code> as mandatory
+at some point; test files written before that change kept passing while
+new ones written without checking the doctype's mandatory list failed
+at <code>setUpClass</code> time.</p>
+<p>When the doctype gains a new mandatory field, update <strong><code>factories.py</code>
+once</strong> — every test that imports the factory inherits the fix. Test files
+that inline their own fixture have to be patched individually and
+inevitably one gets missed.</p>
+<h3 id="usage-pattern">Usage pattern</h3>
+<pre><code class="language-python">from tap_lms.summer_program.tests.factories import (
+    make_batch, make_student, make_active_pe,
+)
+
+class TestMyFeature(FrappeTestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.batch = make_batch(&quot;MyFeatureTestBatch&quot;, batch_id=&quot;MF01&quot;)
+
+    def test_something(self):
+        student = make_student(
+            suffix=&quot;01&quot;,
+            phone_prefix=&quot;+9999800&quot;,   # unique-per-test prefix
+            glific_id=&quot;glific-mf-01&quot;,
+        )
+        pe = make_active_pe(student, self.batch, glific_id=&quot;glific-mf-01&quot;)
+        # ... assertions
+</code></pre>
+<h3 id="hard-rule">Hard rule</h3>
+<p><strong>Do not redefine <code>_ensure_batch</code> / <code>_ensure_student</code> / <code>_ensure_pe</code> in
+new test files.</strong> Import from <code>factories.py</code>. The reviewer treats local
+fixture inlining as a Major finding when the factory covers the case.</p>
+<p>If you genuinely need a different fixture shape (e.g. a Batch with a
+specific <code>program_type</code> value the factory doesn't expose), pass it as a
+kwarg to the factory. If the factory doesn't accept that kwarg, ADD IT
+to the factory rather than inline a one-off.</p>
+<h2 id="generic-test-data-factories-for-new-modules-without-their-own">Generic test data factories (for new modules without their own)</h2>
+<p>Don't paste DocType creation everywhere — write factories.</p>
+<pre><code class="language-python"># app/&lt;your_app&gt;/tests/factories.py
+import frappe
+
+def make_student(student_id=&quot;STU-AUTO&quot;, **overrides):
+    if frappe.db.exists(&quot;Student&quot;, student_id):
+        return student_id
+    return frappe.get_doc({
+        &quot;doctype&quot;: &quot;Student&quot;,
+        &quot;student_id&quot;: student_id,
+        &quot;first_name&quot;: overrides.get(&quot;first_name&quot;, &quot;Test&quot;),
+        &quot;last_name&quot;: overrides.get(&quot;last_name&quot;, &quot;Student&quot;),
+        &quot;email&quot;: overrides.get(&quot;email&quot;, f&quot;{student_id.lower()}@test.local&quot;),
+    }).insert(ignore_permissions=True).name
+
+def make_course(code=&quot;CS-AUTO&quot;, **overrides):
+    if frappe.db.exists(&quot;Course&quot;, code):
+        return code
+    return frappe.get_doc({
+        &quot;doctype&quot;: &quot;Course&quot;,
+        &quot;course_code&quot;: code,
+        &quot;title&quot;: overrides.get(&quot;title&quot;, f&quot;Test Course {code}&quot;),
+        &quot;credits&quot;: overrides.get(&quot;credits&quot;, 3),
+    }).insert(ignore_permissions=True).name
+</code></pre>
+<h2 id="user-context">User context</h2>
+<p>Tests run as Administrator by default. To exercise permission logic:</p>
+<pre><code class="language-python">def test_student_cannot_delete_enrollment(self):
+    frappe.set_user(&quot;student@test.local&quot;)
+    try:
+        with self.assertRaises(frappe.PermissionError):
+            frappe.delete_doc(&quot;Course Enrollment&quot;, self.enrollment)
+    finally:
+        frappe.set_user(&quot;Administrator&quot;)
+</code></pre>
+<p>Always restore Administrator in <code>finally</code> — leaks bleed across tests.</p>
+<h2 id="mocking-external-services">Mocking external services</h2>
+<p>Frappe doesn't bundle a mocking library — use <code>unittest.mock</code>:</p>
+<pre><code class="language-python">from unittest.mock import patch
+
+def test_webhook_calls_payment_provider(self):
+    with patch(&quot;tap_lms.tap_lms.payments.requests.post&quot;) as fake_post:
+        fake_post.return_value.status_code = 200
+        fake_post.return_value.json.return_value = {&quot;ok&quot;: True}
+        # ... call the code that hits the provider
+        fake_post.assert_called_once()
+</code></pre>
+<p>For email, set <code>frappe.flags.in_test = True</code> (the test runner does this automatically) — emails are queued, not sent.</p>
+<p>For background jobs, in tests they run synchronously by default unless <code>frappe.flags.now = True</code> is overridden. To assert a job was enqueued without running it, patch <code>frappe.enqueue</code>.</p>
+<h2 id="what-about-pytest">What about pytest?</h2>
+<p>Frappe v15+ has experimental pytest support via <code>pytest-frappe</code>. The wins are richer fixtures, parallelism, and parameterization. The cost is one more dependency and slightly different conventions. Decision is yours; the unittest runner is fine for most cases. If you adopt pytest, fixtures replace <code>setUpClass</code>:</p>
+<pre><code class="language-python">import pytest
+
+@pytest.fixture
+def student():
+    return make_student(&quot;STU-PYTEST&quot;)
+
+def test_enrollment_creates_progress(student):
+    ...
+</code></pre>
+<h2 id="ci-integration">CI integration</h2>
+<p>A minimal GitHub Actions step:</p>
+<pre><code class="language-yaml">- name: Set up bench (Postgres)
+  run: |
+    pip install frappe-bench
+    bench init --frappe-branch version-15 frappe-bench --skip-redis-config-generation --skip-assets
+    cd frappe-bench
+    bench new-site test_site --db-type postgres --db-host 127.0.0.1 --admin-password admin
+    bench --site test_site install-app tap_lms
+
+- name: Run tests
+  working-directory: frappe-bench
+  run: bench --site test_site run-tests --app tap_lms --coverage
+</code></pre>
+<p>Pin the Frappe branch and Postgres version. Test environments diverging from prod is the leading cause of "passes locally, fails in CI."</p>
+<h2 id="common-gotchas">Common gotchas</h2>
+<ul>
+<li>A test that calls <code>frappe.db.commit()</code> will break the rollback contract — every later test in the run sees the leaked data. Don't commit in tests.</li>
+<li>A test that mutates the metadata cache (<code>frappe.clear_cache()</code> then loads new DocTypes) bleeds across tests. Reset what you mutate in <code>tearDown</code>.</li>
+<li>Permission tests that don't restore the user (see above) cause "but it works on my machine" debugging hell.</li>
+<li>Tests that assume autoincrement names (<code>CRS-00001</code>) are brittle — name your test fixtures explicitly.</li>
+<li>Long test setup that creates 50 docs to test one thing — extract a factory; you'll thank yourself.</li>
+</ul>
+<h2 id="when-a-feature-ships">When a feature ships</h2>
+<p>Aim for: one happy path, one validation/edge-case, one permission test per public-facing controller method or whitelisted API. That's the minimum bar for "this is reviewed and tested" — anything less, the code-reviewer agent will flag (lesson L-016).</p>
+<h2 id="project-specific-test-rules">Project-specific test rules</h2>
+<p>These rules come from real bugs that shipped and are non-negotiable:</p>
+<ul>
+<li><strong>Never call <code>frappe.db.commit()</code> in tests.</strong> The runner relies on transaction rollback for isolation. A single commit leaks data into every later test in the run. Lesson L-017. Code-reviewer flags this as BLOCKING.</li>
+<li><strong>Atomic-claim code needs an actual concurrency test.</strong> A <code>SELECT ROW_COUNT()</code> style PG-incompatibility bug cannot be caught by code review alone — it surfaces only when a duplicate UPDATE runs and the code can't tell the difference. Every state-changing UPDATE that uses pattern P-001 needs a test that:</li>
+<li>Sets the doc to <code>expected_label</code>.</li>
+<li>Calls the handler twice in the same test (or from two threads) and asserts the second call is a no-op (no double-side-effects, no exception).</li>
+<li>Asserts the row's <code>journey_label</code> advanced exactly once.</li>
+</ul>
+<p>Lesson L-018. Without this test, the bug ships.
+- <strong>Restore <code>Administrator</code> after permission tests.</strong> Always wrap <code>frappe.set_user(...)</code> in <code>try/finally</code> — leaks bleed across tests in the same run.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1734 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Write or modify Frappe DocType controllers — the `<doctype>.py` files that hold server-side business logic, validation, and lifecycle hooks. Trigger whenever the user wants to validate data, react to save/submit/cancel, compute fields, fetch related records, send notifications on document events, or implement any "when X happens to a doc, do Y" logic. Also use when refactoring existing controller methods, fixing controller bugs, or moving logic out of client scripts into Python.">
+      
+      
+      
+      
+        <link rel="prev" href="../client-script/">
+      
+      
+        <link rel="next" href="../doctype/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Frappe controller skill - claude-cowork-code — Team Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#frappe-controller-skill" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="claude-cowork-code — Team Guide" class="md-header__button md-logo" aria-label="claude-cowork-code — Team Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            claude-cowork-code — Team Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Frappe controller skill
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="claude-cowork-code — Team Guide" class="md-nav__button md-logo" aria-label="claude-cowork-code — Team Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    claude-cowork-code — Team Guide
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to use claude-cowork-code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adopt-for-new-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adopt it for a new project
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adopt-frappe-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adopt it for a new Frappe app
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../engineering-playbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engineering playbook — CR → build → release
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../methodology/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Methodology — why it's built this way
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../product-playbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product playbook — idea → BR / PRD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../publishing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Publishing the guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Frappe
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe reference skills
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe API skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bench/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe bench skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../client-script/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe client script skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe controller skill
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe controller skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#lifecycle-order-memorize-this" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lifecycle order — memorize this
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#skeleton" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skeleton
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#raising-errors-the-right-way" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Raising errors the right way
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reading-and-writing-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading and writing data
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#permissions-inside-the-controller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Permissions inside the controller
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transactions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transactions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#background-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Background work
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Background work">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#background-jobs-log-structured-context-on-both-paths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Background jobs — log structured context on BOTH paths
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Background jobs — log structured context on BOTH paths">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#wrong-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wrong pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#right-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Right pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#external-identifier-semantics-avoid-contact_id-student_id-confusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        External identifier semantics — avoid contact_id ↔ student_id confusion
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="External identifier semantics — avoid contact_id ↔ student_id confusion">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hard-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hard rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wrong-pattern_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wrong pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#right-pattern_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Right pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#code-reviewer-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Code-reviewer rule
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#realtime-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Realtime updates
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#state-machine-controllers-project-idioms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        State-machine controllers — project idioms
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="State-machine controllers — project idioms">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#atomic-claim-with-journey_label-guard-p-001" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Atomic claim with journey_label guard (P-001)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coalesce-update-for-race-tolerant-counters-p-002" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        COALESCE-update for race-tolerant counters (P-002)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-wider-rule-docsaveignore_permissionstrue-is-a-write-every-column-hazard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The wider rule — doc.save(ignore_permissions=True) is a write-every-column hazard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#audit-field-first-idempotency-p-005" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audit-field-first idempotency (P-005)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-anti-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common anti-patterns
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-the-controller-is-too-small-for-its-own-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When the controller is too small for its own file
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../doctype/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe DocType skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe hooks.py skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../postgres/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe + PostgreSQL skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../test/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Frappe testing skill
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#lifecycle-order-memorize-this" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lifecycle order — memorize this
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#skeleton" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Skeleton
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#raising-errors-the-right-way" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Raising errors the right way
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reading-and-writing-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reading and writing data
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#permissions-inside-the-controller" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Permissions inside the controller
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transactions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transactions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#background-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Background work
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Background work">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#background-jobs-log-structured-context-on-both-paths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Background jobs — log structured context on BOTH paths
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Background jobs — log structured context on BOTH paths">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#wrong-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wrong pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#right-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Right pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#external-identifier-semantics-avoid-contact_id-student_id-confusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        External identifier semantics — avoid contact_id ↔ student_id confusion
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="External identifier semantics — avoid contact_id ↔ student_id confusion">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hard-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hard rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wrong-pattern_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wrong pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#right-pattern_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Right pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#code-reviewer-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Code-reviewer rule
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#realtime-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Realtime updates
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#state-machine-controllers-project-idioms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        State-machine controllers — project idioms
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="State-machine controllers — project idioms">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#atomic-claim-with-journey_label-guard-p-001" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Atomic claim with journey_label guard (P-001)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coalesce-update-for-race-tolerant-counters-p-002" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        COALESCE-update for race-tolerant counters (P-002)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-wider-rule-docsaveignore_permissionstrue-is-a-write-every-column-hazard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The wider rule — doc.save(ignore_permissions=True) is a write-every-column hazard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#audit-field-first-idempotency-p-005" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Audit-field-first idempotency (P-005)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-anti-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common anti-patterns
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-the-controller-is-too-small-for-its-own-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When the controller is too small for its own file
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="frappe-controller-skill">Frappe controller skill</h1>
+<p>The controller is <code>&lt;doctype&gt;.py</code> next to the DocType JSON. It defines a class that subclasses <code>Document</code> and exposes lifecycle methods Frappe calls automatically.</p>
+<h2 id="lifecycle-order-memorize-this">Lifecycle order — memorize this</h2>
+<p>For an insert:
+<code>autoname</code> → <code>before_insert</code> → <code>validate</code> → <code>before_save</code> → (DB INSERT) → <code>after_insert</code> → <code>on_update</code></p>
+<p>For an update:
+<code>validate</code> → <code>before_save</code> → (DB UPDATE) → <code>on_update</code></p>
+<p>For a submit:
+<code>validate</code> → <code>before_save</code> → (DB UPDATE) → <code>on_update</code> → <code>before_submit</code> → (set docstatus=1) → <code>on_submit</code></p>
+<p>For a cancel:
+<code>before_cancel</code> → (set docstatus=2) → <code>on_cancel</code> → <code>on_update_after_submit</code></p>
+<p>For a delete:
+<code>on_trash</code> → (DB DELETE) → <code>after_delete</code></p>
+<p>Pick the right hook. <code>validate</code> is for guarding writes (raise if data is bad). <code>on_update</code> is for side effects that need the doc to already exist in DB (creating linked records, sending emails). <code>before_save</code> is rare — prefer <code>validate</code>.</p>
+<h2 id="skeleton">Skeleton</h2>
+<pre><code class="language-python">import frappe
+from frappe.model.document import Document
+from frappe import _
+
+
+class CourseEnrollment(Document):
+    def validate(self):
+        self._guard_duplicate_enrollment()
+        self._set_default_status()
+
+    def on_submit(self):
+        self._notify_student()
+        self._create_progress_record()
+
+    def on_cancel(self):
+        # Reverse anything on_submit did.
+        frappe.db.set_value(
+            &quot;Lesson Progress&quot;,
+            {&quot;enrollment&quot;: self.name},
+            &quot;status&quot;, &quot;Cancelled&quot;,
+        )
+
+    # --- private helpers -------------------------------------------
+
+    def _guard_duplicate_enrollment(self):
+        if frappe.db.exists(
+            &quot;Course Enrollment&quot;,
+            {&quot;student&quot;: self.student, &quot;course&quot;: self.course, &quot;name&quot;: (&quot;!=&quot;, self.name)},
+        ):
+            frappe.throw(_(&quot;{0} is already enrolled in {1}&quot;).format(self.student, self.course))
+
+    def _set_default_status(self):
+        if not self.status:
+            self.status = &quot;Active&quot;
+
+    def _notify_student(self):
+        # ...
+        pass
+
+    def _create_progress_record(self):
+        # ...
+        pass
+</code></pre>
+<p>Use leading-underscore helpers to keep the public surface clean. Frappe only calls methods named after lifecycle events; everything else is yours.</p>
+<h2 id="raising-errors-the-right-way">Raising errors the right way</h2>
+<p><code>frappe.throw(_("message"))</code> aborts the transaction and shows the message to the user. <code>frappe.msgprint(_("..."))</code> shows a non-fatal notice. Always wrap user-visible strings in <code>_()</code> for translation. Pass <code>title</code> and <code>indicator</code> for richer UX:</p>
+<pre><code class="language-python">frappe.throw(_(&quot;Course is full&quot;), title=_(&quot;Cannot enrol&quot;), indicator=&quot;red&quot;)
+</code></pre>
+<p>Custom exception classes give cleaner programmatic handling:</p>
+<pre><code class="language-python">class CourseFullError(frappe.ValidationError): pass
+
+frappe.throw(_(&quot;Course is full&quot;), exc=CourseFullError)
+</code></pre>
+<h2 id="reading-and-writing-data">Reading and writing data</h2>
+<p>Inside a controller, the doc itself is <code>self</code>. For other docs:</p>
+<ul>
+<li><code>frappe.get_doc("Course", course_name)</code> — full document object, fires controller hooks on save.</li>
+<li><code>frappe.get_cached_doc(...)</code> — same but cached for the request. Use for read-only lookups in hot paths.</li>
+<li><code>frappe.db.get_value("Course", name, "title")</code> — single-field read, no controller. Fast.</li>
+<li><code>frappe.db.get_value("Course", {"code": "CS101"}, ["title", "credits"], as_dict=True)</code> — filter + multi-field.</li>
+<li><code>frappe.get_all("Course Enrollment", filters={"student": self.student}, fields=["name", "status"])</code> — multi-row read; respects user permissions if <code>ignore_permissions</code> not set.</li>
+<li><code>frappe.db.sql("SELECT ...", values, as_dict=True)</code> — escape hatch. Use parameterized queries; never f-string user input.</li>
+<li><code>frappe.db.set_value("Course", name, "status", "Closed")</code> — single-field write, <strong>does not</strong> fire controller hooks. Use sparingly; prefer loading the doc and calling <code>.save()</code> so validation runs.</li>
+</ul>
+<h2 id="permissions-inside-the-controller">Permissions inside the controller</h2>
+<p>Controllers run with the caller's permissions by default. To bypass (e.g., a student submission needs to update an instructor's record), pass <code>ignore_permissions=True</code> to <code>.save()</code> / <code>.insert()</code>, or run the work inside <code>frappe.flags</code> overrides. Be deliberate — bypassing is the #1 source of authorization bugs.</p>
+<pre><code class="language-python">note = frappe.new_doc(&quot;Communication&quot;)
+note.subject = f&quot;New enrollment from {self.student}&quot;
+note.insert(ignore_permissions=True)
+</code></pre>
+<h2 id="transactions">Transactions</h2>
+<p>Each request runs in a single transaction; Frappe commits on success and rolls back on exception. Avoid manually calling <code>frappe.db.commit()</code> inside controller code — it breaks atomicity. The exceptions are background jobs and long migrations, where partial commits are intentional.</p>
+<h2 id="background-work">Background work</h2>
+<p><code>on_submit</code> should not block the user for &gt;100ms. Anything heavy (PDF rendering, external API calls, sending many emails) goes in <code>frappe.enqueue</code>:</p>
+<pre><code class="language-python">def on_submit(self):
+    frappe.enqueue(
+        &quot;tap_lms.tap_lms.doctype.course_enrollment.course_enrollment.send_welcome_packet&quot;,
+        enrollment=self.name,
+        queue=&quot;long&quot;,
+        job_name=f&quot;welcome:{self.name}&quot;,
+    )
+</code></pre>
+<p>The function must be importable by dotted path (so module-level, not a method on <code>self</code>). Pass primitive args.</p>
+<h3 id="background-jobs-log-structured-context-on-both-paths">Background jobs — log structured context on BOTH paths</h3>
+<p>Background jobs (<code>frappe.enqueue</code> targets, scheduler functions) that swallow
+exceptions silently are the #1 source of "but the queue says success"
+debugging pain on this project. Filed as bugs #3 and #5 (both 2026-05-18):
+<code>_process_pe_chunk</code> silently rejected 4 of 41 PE creations and
+<code>_sync_contact_fields_job</code> intermittently dropped field writes — neither
+left an Error Log entry, both took hours of console diagnostics to find.</p>
+<p><strong>Hard rule for any background job:</strong></p>
+<ol>
+<li>Every <code>try/except</code> must log via <code>frappe.log_error(title=..., message=...)</code>
+   with structured context: PE name, student ID, glific ID, batch name, the
+   action that was attempted, the underlying exception type + message.</li>
+<li>The success path must log via <code>frappe.logger().info(...)</code> with at minimum
+   "what worker ran, what entity, what changed." This is what lets ops
+   answer "did this contact actually receive the field update?" without
+   running custom diagnostic queries.</li>
+<li>Returning silently with no exception AND no log is BLOCKING per code
+   reviewer. Workers must succeed visibly or fail visibly — not both, never
+   neither.</li>
+<li>DLQ patterns (P-007 / L-015) make the silent-success case technically
+   OK only if the success path itself logs as in (2).</li>
+</ol>
+<h4 id="wrong-pattern">Wrong pattern</h4>
+<pre><code class="language-python">def _sync_contact_fields_job(glific_id, fields, pe_name, ...):
+    try:
+        update_contact_fields(glific_id, fields)
+    except Exception:
+        pass   # ← BLOCKING: silent swallow
+</code></pre>
+<h4 id="right-pattern">Right pattern</h4>
+<pre><code class="language-python">def _sync_contact_fields_job(glific_id, fields, pe_name, ...):
+    try:
+        update_contact_fields(glific_id, fields)
+        frappe.logger().info(
+            f&quot;sync_contact_fields_ok: pe={pe_name} glific={glific_id} &quot;
+            f&quot;fields_count={len(fields)}&quot;
+        )
+    except Exception as e:
+        frappe.log_error(
+            title=&quot;SP Glific Sync Failed&quot;,
+            message=(
+                f&quot;sync_contact_fields_failed: pe={pe_name} &quot;
+                f&quot;glific={glific_id} fields={list(fields.keys())} &quot;
+                f&quot;error={type(e).__name__}: {e}&quot;
+            ),
+        )
+        raise   # let the retry/DLQ machinery handle re-enqueue
+</code></pre>
+<p>Use a structured log-key prefix (e.g. <code>sync_contact_fields_ok</code> /
+<code>sync_contact_fields_failed</code>) so ops can grep for either outcome.</p>
+<h2 id="external-identifier-semantics-avoid-contact_id-student_id-confusion">External identifier semantics — avoid contact_id ↔ student_id confusion</h2>
+<p>The project carries multiple distinct kinds of identifiers that share
+variable names across functions. Confusing them is a recurring source of
+"Glific returned a generic error" bugs (2026-05-19 <code>FeedbackConsumer.send_glific_notification</code>
+shipped passing <code>Student.name</code> as <code>contact_id</code>; bug took 2 hours to debug).</p>
+<table>
+<thead>
+<tr>
+<th>Identifier</th>
+<th>Type</th>
+<th>Example</th>
+<th>Lives on</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frappe Student doc name</td>
+<td>string</td>
+<td><code>"ST00051238"</code></td>
+<td><code>Student.name</code>, <code>PE.student</code></td>
+</tr>
+<tr>
+<td>Glific contact ID</td>
+<td>numeric string</td>
+<td><code>"13325"</code></td>
+<td><code>Student.glific_id</code>, <code>PE.glific_id</code>, Glific contactByPhone result</td>
+</tr>
+<tr>
+<td>Phone (Glific-stored)</td>
+<td>E.164-ish</td>
+<td><code>"91XXXXXXXXXX"</code></td>
+<td><code>Student.phone</code>, Glific contact's <code>.phone</code></td>
+</tr>
+<tr>
+<td>Frappe Batch doc name</td>
+<td>string</td>
+<td><code>"palv2-test-BT52231"</code></td>
+<td><code>Batch.name</code>, <code>PE.batch</code></td>
+</tr>
+<tr>
+<td>Friendly batch identifier</td>
+<td>short string</td>
+<td><code>"SP_BATCH_01"</code></td>
+<td><code>Batch.batch_id</code>, Glific <code>batch_id</code> contact field</td>
+</tr>
+</tbody>
+</table>
+<h3 id="hard-rules">Hard rules</h3>
+<ol>
+<li>Any function whose signature includes <code>contact_id</code>, <code>glific_id</code>,
+   <code>student_id</code>, <code>batch</code>, or <code>batch_id</code> must document in its docstring
+   exactly which of these identifier types it expects.</li>
+<li>When crossing between systems (Glific ↔ Frappe), explicitly resolve the
+   identifier at the call site rather than passing it through opaquely.</li>
+<li>Any call to a Glific API helper (<code>start_contact_flow</code>,
+   <code>update_contact_fields</code>, <code>add_contact_to_group</code>,
+   <code>remove_contact_from_group</code>) must visibly resolve the Glific contact ID
+   at the call site — not via a variable named <code>student_id</code> whose origin is
+   ambiguous.</li>
+</ol>
+<h3 id="wrong-pattern_1">Wrong pattern</h3>
+<pre><code class="language-python">def send_glific_notification(self, message_data):
+    student_id = message_data.get(&quot;student_id&quot;)   # actually a Frappe doc name
+    start_contact_flow(
+        flow_id=flow_id,
+        contact_id=student_id,   # ← Glific can't resolve &quot;ST00051238&quot;
+        default_results=...,
+    )
+</code></pre>
+<h3 id="right-pattern_1">Right pattern</h3>
+<pre><code class="language-python">def send_glific_notification(self, message_data):
+    student_id = message_data.get(&quot;student_id&quot;)   # Frappe Student doc name
+    glific_id = frappe.db.get_value(&quot;Student&quot;, student_id, &quot;glific_id&quot;)
+    if not glific_id:
+        frappe.logger().warning(
+            f&quot;Student {student_id} has no glific_id; &quot;
+            f&quot;skipping notification for submission {submission_id}&quot;
+        )
+        return
+    start_contact_flow(
+        flow_id=str(flow_id),
+        contact_id=str(glific_id),   # ← visibly resolved at the call site
+        default_results=...,
+    )
+</code></pre>
+<h3 id="code-reviewer-rule">Code-reviewer rule</h3>
+<p>When reviewing any call to a Glific API helper, ask: "where did the
+contact_id come from?" If the answer is "a parameter that flowed in
+from a few functions ago" — flag it as Major. The variable name <code>student_id</code>
+is opaque about which kind of ID it carries; trace it to its origin or
+require an explicit resolution at the call site.</p>
+<h2 id="realtime-updates">Realtime updates</h2>
+<p><code>frappe.publish_realtime("event_name", {"payload": 1}, user=self.owner)</code> pushes a SocketIO event the JS form listens for. Useful for "your certificate is ready" type pings.</p>
+<h2 id="state-machine-controllers-project-idioms">State-machine controllers — project idioms</h2>
+<p>For controllers that mutate a state-machine doc (<code>ProgramEnrollment</code> and friends), three patterns are non-negotiable on this project. They live canonically in <code>.claude/memory/patterns.md</code>:</p>
+<h3 id="atomic-claim-with-journey_label-guard-p-001">Atomic claim with <code>journey_label</code> guard (P-001)</h3>
+<p>Every state-changing UPDATE goes through a <code>WHERE journey_label = expected_label … RETURNING name</code> query. 0 rows returned = parallel handler already moved the state; skip without raising.</p>
+<pre><code class="language-python">claimed = frappe.db.sql(&quot;&quot;&quot;
+    UPDATE &quot;tabProgramEnrollment&quot;
+       SET resolved_flow_state = %s, journey_label = %s,
+           next_action_at = %s,    next_action_type = %s
+     WHERE name = %s AND journey_label = %s
+     RETURNING name
+&quot;&quot;&quot;, (new_state, new_label, next_at, next_type, pe_name, expected_label))
+if not claimed:
+    return
+</code></pre>
+<p>Never use <code>SELECT ROW_COUNT()</code> to count affected rows — Postgres doesn't have it (lesson L-001). Use <code>len(claimed)</code> or <code>if not claimed:</code>.</p>
+<h3 id="coalesce-update-for-race-tolerant-counters-p-002">COALESCE-update for race-tolerant counters (P-002)</h3>
+<p>Counters that race against resets (weekly point counters reset by T14, etc.) MUST use a single atomic UPDATE with <code>COALESCE</code>, never read-then-write:</p>
+<pre><code class="language-python"># Bad — read-then-write loses races
+pe = frappe.get_doc(&quot;Program Enrollment&quot;, pe_name)
+pe.weekly_quiz_points += earned
+pe.save()
+
+# Good — atomic at the column level
+frappe.db.sql(&quot;&quot;&quot;
+    UPDATE &quot;tabProgramEnrollment&quot;
+       SET weekly_quiz_points = COALESCE(weekly_quiz_points, 0) + %s
+     WHERE name = %s
+&quot;&quot;&quot;, (earned, pe_name))
+</code></pre>
+<p>Lesson L-011.</p>
+<h3 id="the-wider-rule-docsaveignore_permissionstrue-is-a-write-every-column-hazard">The wider rule — <code>doc.save(ignore_permissions=True)</code> is a write-every-column hazard</h3>
+<p><code>pe.save(ignore_permissions=True)</code> writes the FULL row from the in-memory doc. Any column another path bumped via atomic SQL between <code>frappe.get_doc("PE", name)</code> and this <code>.save()</code> gets silently overwritten with the stale value the in-memory doc has been carrying. The longer the request/handler, the wider the race window.</p>
+<p>This isn't theoretical: the TAP LMS PE doctype has 40+ columns; ~10 of them (the <code>total_*</code> and <code>weekly_*</code> points columns plus the streak/gems pair) get bumped concurrently by activity_points / quiz_points / feedback hook handlers. <strong>Every <code>pe.save()</code> in a code path that doesn't intend to mutate ALL columns is a potential drift source.</strong> During the 2026-05-26 pre-launch sweep we found 11 such sites (7 in <code>flow_callback.py</code>, 3 in <code>pe_dispatcher.py</code>, 1 T25 in <code>state_machine.py</code>) and replaced them with targeted <code>db.set_value({...changed fields only...})</code> + <code>pe.reload()</code>.</p>
+<pre><code class="language-python"># WRONG — writes every PE column from a possibly-stale in-memory doc
+pe = frappe.get_doc(&quot;ProgramEnrollment&quot;, pe_name)
+# ... long handler runs; another worker bumps total_points concurrently ...
+pe.next_action_at = some_new_time
+pe.next_action_type = &quot;escalation&quot;
+pe.save(ignore_permissions=True)   # ← clobbers the concurrent total_points bump
+
+# RIGHT — atomic, only touches the columns this handler owns
+frappe.db.set_value(
+    &quot;ProgramEnrollment&quot;, pe_name,
+    {&quot;next_action_at&quot;: some_new_time, &quot;next_action_type&quot;: &quot;escalation&quot;},
+    update_modified=False,
+)
+pe.reload()    # if downstream code in this handler needs to read pe fields
+</code></pre>
+<p>Rule of thumb for PE-like doctypes with concurrent column writers: handlers that intend to write 1–3 specific fields use <code>db.set_value</code>; handlers that intend to bulk-reset the whole row (<code>dev_tools.reset_pe_to_state_0</code>) keep <code>pe.save()</code> because the intent IS to clobber. The signal is the verb: "set N specific things" vs "rewrite the whole doc to a known state."</p>
+<p><strong><code>db.set_value</code> bypasses controller <code>validate</code> AND <code>on_update</code> AND <code>track_changes</code></strong> — this is the standard Frappe behavior. It's a deliberate trade: the gain is no-clobber semantics; the cost is no automatic save-hook side effects. If the column being set is Glific-mirrored, follow up with <code>dev_tools.reconcile_pe_to_glific(pe_name)</code> (or <code>_enqueue_contact_field_sync(pe)</code>) to push the change. If the column requires validate-style guarding, do the validation manually before calling <code>set_value</code>.</p>
+<h3 id="audit-field-first-idempotency-p-005">Audit-field-first idempotency (P-005)</h3>
+<p>Per-attempt audit fields (e.g., <code>StudentQuizAttempt.points_earned</code>) should be written FIRST, before any rollup updates. The field is the lock — re-runs check <code>if attempt.points_earned: return</code>.</p>
+<pre><code class="language-python">def award_points(attempt_name):
+    attempt = frappe.get_doc(&quot;Student Quiz Attempt&quot;, attempt_name)
+    if attempt.points_earned:
+        return                     # ← write-once lock; re-runs are no-op
+    earned = compute(...)
+    frappe.db.set_value(&quot;Student Quiz Attempt&quot;, attempt_name, &quot;points_earned&quot;, earned)
+    apply_to_pe_counters(earned)   # safe to retry from here
+</code></pre>
+<p>Lesson L-012.</p>
+<h2 id="common-anti-patterns">Common anti-patterns</h2>
+<ul>
+<li>Putting business rules in <code>before_save</code> instead of <code>validate</code> — they don't run during <code>db_update</code> calls and you get inconsistent behavior.</li>
+<li>Using <code>frappe.db.set_value</code> to flip a status field that has its own controller logic, then being surprised the side effects didn't fire.</li>
+<li>Querying inside a loop (<code>for x in ...: frappe.get_doc(...)</code>) — fetch once with <code>frappe.get_all</code> and a <code>name in (...)</code> filter.</li>
+<li>Forgetting <code>_()</code> on strings, then having the translation team chase you.</li>
+<li>Calling <code>frappe.db.commit()</code> in the middle of <code>on_submit</code> — partial state if the rest of the method throws.</li>
+<li>Wrapping a state-changing UPDATE in a broad <code>except Exception:</code> block with a "MariaDB fallback" branch. The except swallows real PG errors, the fallback is dead code on this project, and the combination risks double-running. Lesson L-007 — remove rather than maintain.</li>
+</ul>
+<h2 id="when-the-controller-is-too-small-for-its-own-file">When the controller is too small for its own file</h2>
+<p>Generic helpers (e.g., a function used by many DocTypes) belong in <code>app/&lt;your_app&gt;/&lt;your_module&gt;/utils.py</code> or a dedicated module — not duplicated across controllers. Import explicitly; don't rely on Frappe's monkey patching.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
