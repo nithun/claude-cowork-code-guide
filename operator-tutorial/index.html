@@ -1,0 +1,1090 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../architecture/">
+      
+      
+        <link rel="next" href="../reusable-components/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>TAP LMS Operator Tutorial — Running a Batch from Start to Finish - TAP LMS Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#tap-lms-operator-tutorial-running-a-batch-from-start-to-finish" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="TAP LMS Docs" class="md-header__button md-logo" aria-label="TAP LMS Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            TAP LMS Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              TAP LMS Operator Tutorial — Running a Batch from Start to Finish
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="TAP LMS Docs" class="md-nav__button md-logo" aria-label="TAP LMS Docs" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    TAP LMS Docs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TAP LMS Documentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TAP LMS Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TAP LMS Operator Tutorial — Running a Batch from Start to Finish
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TAP LMS Operator Tutorial — Running a Batch from Start to Finish
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#part-1-what-the-system-does" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 1 — What the system does
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-2-how-one-students-week-works-the-automated-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 2 — How one student's week works (the automated loop)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-3-setting-up-a-new-batch-the-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 3 — Setting up a new batch (the checklist)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 3 — Setting up a new batch (the checklist)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-content-is-loaded" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1 — Content is loaded
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-whatsapp-glific-is-prepared" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2 — WhatsApp (Glific) is prepared
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-escalation-and-parent-calls-are-configured" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3 — Escalation and parent calls are configured
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-create-the-batch-and-link-the-schools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4 — Create the Batch and link the schools
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-import-students" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5 — Import students
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-6-validate-and-activate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6 — Validate and activate
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-4-during-the-run-whats-automatic-vs-what-you-do" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 4 — During the run: what's automatic vs. what you do
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 4 — During the run: what&#39;s automatic vs. what you do">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#automatic-no-action-needed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automatic (no action needed)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#your-weekly-monitoring-routine-1015-minutes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Your weekly monitoring routine (10–15 minutes)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#looking-up-one-student" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Looking up one student
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#if-whatsapp-glific-goes-down" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        If WhatsApp (Glific) goes down
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-5-end-of-program" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 5 — End of program
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-6-running-the-next-batch-or-a-new-program" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 6 — Running the next batch or a new program
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-reference-glossary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick-reference glossary
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reusable-components/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TAP LMS — Reusability Booklet for the Next Project
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#part-1-what-the-system-does" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 1 — What the system does
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-2-how-one-students-week-works-the-automated-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 2 — How one student's week works (the automated loop)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-3-setting-up-a-new-batch-the-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 3 — Setting up a new batch (the checklist)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 3 — Setting up a new batch (the checklist)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-content-is-loaded" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1 — Content is loaded
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-whatsapp-glific-is-prepared" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2 — WhatsApp (Glific) is prepared
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-escalation-and-parent-calls-are-configured" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3 — Escalation and parent calls are configured
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-create-the-batch-and-link-the-schools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4 — Create the Batch and link the schools
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-import-students" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5 — Import students
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-6-validate-and-activate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6 — Validate and activate
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-4-during-the-run-whats-automatic-vs-what-you-do" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 4 — During the run: what's automatic vs. what you do
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 4 — During the run: what&#39;s automatic vs. what you do">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#automatic-no-action-needed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automatic (no action needed)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#your-weekly-monitoring-routine-1015-minutes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Your weekly monitoring routine (10–15 minutes)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#looking-up-one-student" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Looking up one student
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#if-whatsapp-glific-goes-down" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        If WhatsApp (Glific) goes down
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-5-end-of-program" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 5 — End of program
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-6-running-the-next-batch-or-a-new-program" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 6 — Running the next batch or a new program
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-reference-glossary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick-reference glossary
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="tap-lms-operator-tutorial-running-a-batch-from-start-to-finish">TAP LMS Operator Tutorial — Running a Batch from Start to Finish</h1>
+<p><strong>Audience:</strong> Program and operations staff (no coding required)
+<strong>Companion doc:</strong> <code>reusable-components.md</code> (what carries over to future projects)
+<strong>Date:</strong> 2026-06-12 · Draft for review</p>
+<hr />
+<h2 id="part-1-what-the-system-does">Part 1 — What the system does</h2>
+<p>TAP LMS runs a multi-week WhatsApp learning program with almost no manual work during the run. Once a batch is set up and activated, the system automatically:</p>
+<ul>
+<li>delivers each week's content to students on WhatsApp every Tuesday morning,</li>
+<li>tracks every student's individual progress (videos watched, quizzes taken, work submitted),</li>
+<li>awards points, gems, and streaks as students engage,</li>
+<li>opens a per-student "grace window" each week and sends escalating nudges if a student goes quiet — up to and including an automated phone call to the parent,</li>
+<li>collects student submissions, sends them to an AI feedback service, and delivers personalised feedback back to the student on WhatsApp,</li>
+<li>advances the program calendar every Monday, and</li>
+<li>marks students completed at the end (with a celebratory message) or dropped if they disengage past the grace period.</li>
+</ul>
+<p>A background engine checks every minute for any student whose "next action" is due, at a tested capacity of roughly 240,000 student-actions per hour — so batch size is not a practical constraint.</p>
+<p><strong>The one rule to remember:</strong> student profiles (<code>archetype</code>) and experiment groups (<code>experiment_arm</code>) are <strong>always supplied in your data upload</strong>. The system never assigns or changes them on its own. If they're wrong, fix the source data.</p>
+<h2 id="part-2-how-one-students-week-works-the-automated-loop">Part 2 — How one student's week works (the automated loop)</h2>
+<p>Understanding this loop is 80% of understanding the system:</p>
+<ol>
+<li><strong>Tuesday:</strong> the week's content arrives in the student's WhatsApp.</li>
+<li>Student <strong>watches the video</strong> → points awarded, and the week's grace window opens (e.g. submission expected within the configured number of days).</li>
+<li>If the student <strong>doesn't submit</strong>, nudges escalate day by day according to their archetype's plan — gentle reminder → stronger reminder → (for some archetypes) an automated parent call.</li>
+<li>Student <strong>submits work</strong> on WhatsApp → submission stored → sent to the AI feedback service → feedback delivered back to the student → week marked complete.</li>
+<li><strong>Monday:</strong> the calendar advances; weekly counters reset; the loop starts again for the next week.</li>
+<li>After the final week: student is marked <strong>completed</strong>. If a grace window expires with no submission and all escalation steps are exhausted, the student is marked <strong>dropped</strong> (with the reason recorded).</li>
+</ol>
+<p><img alt="A student's enrollment record" src="../images/operator-tutorial/05-pe-form.png" />
+<em>What one student's enrollment looks like mid-program: the current state (here "submitted_awaiting_feedback"), the week they're on, and their running points total.</em></p>
+<p>Every step is recorded in an event log, so any student's full history can be looked up at any time.</p>
+<h2 id="part-3-setting-up-a-new-batch-the-checklist">Part 3 — Setting up a new batch (the checklist)</h2>
+<p>Work through these in order. Steps 1–2 are usually one-time per program. Step 3's <em>design</em> also carries over between batches, but its records attach to a specific batch, so they're duplicated for each new batch (see Step 3 and Part 6). Steps 4–6 repeat per batch.</p>
+<h3 id="step-1-content-is-loaded">Step 1 — Content is loaded</h3>
+<p>For each week of the program there must be a Learning Unit (per tier, and per language if multilingual) linking that week's video, quiz, and assignment. Course Levels must exist for every course identifier you'll use in the student file.</p>
+<h3 id="step-2-whatsapp-glific-is-prepared">Step 2 — WhatsApp (Glific) is prepared</h3>
+<ul>
+<li>The ~30 SP contact fields are registered in Glific (one-time bootstrap run by engineering: <code>bootstrap_sp_contact_fields</code>).</li>
+<li>The WhatsApp flows exist in Glific (content delivery, feedback delivery, escalation, completion) and you have their flow IDs — these get linked to the batch run in Step 4.</li>
+</ul>
+<h3 id="step-3-escalation-and-parent-calls-are-configured">Step 3 — Escalation and parent calls are configured</h3>
+<p>This step is where the system learns how to treat each kind of student. Of the three setup steps it deserves the most attention, because escalation behaviour is the thing most often tuned between batches.</p>
+<p><strong>How archetypes drive behaviour.</strong> Every student arrives with one of four archetypes in your CSV (see the rule in Part 1 — the system never assigns or changes them):</p>
+<table>
+<thead>
+<tr>
+<th>Archetype</th>
+<th>Typical profile</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>submitter</code></td>
+<td>Reliably engages and submits with minimal prompting</td>
+</tr>
+<tr>
+<td><code>irregular_submitter</code></td>
+<td>Engages, but submits unevenly; needs steady reminders</td>
+</tr>
+<tr>
+<td><code>fence_sitter</code></td>
+<td>Watches content but hesitates to submit; needs more convincing</td>
+</tr>
+<tr>
+<td><code>dormant</code></td>
+<td>Rarely engages on their own; gets the most intensive plan, usually ending in a parent call</td>
+</tr>
+</tbody>
+</table>
+<p>The archetype itself is just a label. What the system <em>does</em> with it lives in <strong>ArchetypeConfig</strong> records.</p>
+<p><strong>One config per combination.</strong> There is one ArchetypeConfig for every combination of <strong>batch × experiment arm × archetype × path</strong> (Core or Remedial). A batch using all four archetypes with one arm needs 8 records — both paths are always required, because a student can move between Core and Remedial mid-program. If A/B experiment arms are in use, each in-use arm needs its own set. The record name spells out its combination, so the list view reads like a coverage table:</p>
+<p><img alt="ArchetypeConfig list for one batch" src="../images/operator-tutorial/08-archetype-config-list.png" />
+<em>One ArchetypeConfig per archetype × arm × path combination — 4 archetypes × default arm × both paths = 8 records for this batch.</em></p>
+<p><strong>Inside each config are two tables:</strong></p>
+<ol>
+<li><strong>Escalation Steps — the nudge ladder.</strong> Each row is one step: its order in the ladder, its type (<code>help_note_a</code> is the gentle text nudge, <code>help_note_b</code> the firmer one, then <code>voice_note</code>, <code>parent_call</code>, <code>program_pause</code>), how many hours after the previous step it fires, and the points the student still earns if they submit after that nudge fired. The points taper down the ladder (e.g. 10 → 7 → 4 → 1), so submitting earlier is always worth more. Gentler archetypes get shorter, lighter ladders (a <code>submitter</code> might get just two help notes); <code>dormant</code> students get the full ladder ending in a parent call.</li>
+<li><strong>Week Rules — what "submitting" means each week.</strong> One row per program week: the expected submission type that week (emoji, word/text/voice, image, video, photo/video artefact, voice-note summary) and whether validation is enforced on it. This is also where the per-week cadence ramps up — early weeks accept an emoji, later weeks expect real artefacts.</li>
+</ol>
+<p><img alt="An ArchetypeConfig record" src="../images/operator-tutorial/09-archetype-config-form.png" />
+<em>The config for one combination (dormant / default arm / Core): the four-step escalation ladder with tapering points, and the week-by-week expected submission types.</em></p>
+<p><strong>Parent calls.</strong> If any ladder includes a <code>parent_call</code> step: the voice service (Vocallabs) credentials must be set, each language mapped to a voice agent, and a call script template in place (it personalises itself with the student's name, week, and course).</p>
+<p><strong>Validation has your back.</strong> The pre-launch validation in Step 6 checks every (archetype, arm, path) combination <em>actually present in your imported students</em> against these configs: each must have an active config with a non-empty ladder and week rules covering the full program duration. A missing combination is a blocking error; oddities like a ladder that runs longer than the grace window are warnings. So a config gap can't silently reach students — but fixing it during validation week is more stressful than getting it right here.</p>
+<p><strong>Per batch, not global.</strong> ArchetypeConfig records attach to a specific batch. For your first batch you create them from scratch; for every batch after that you duplicate the previous batch's records, re-point them at the new batch, and apply whatever changes the last retrospective suggested — escalation timing and ladder composition are the usual tuning candidates (see Part 5).</p>
+<h3 id="step-4-create-the-batch-and-link-the-schools">Step 4 — Create the Batch and link the schools</h3>
+<ul>
+<li>Create a <strong>Batch</strong>: batch ID, start date, end date, number of weeks, grace window days.</li>
+<li>For each participating school, create a <strong>Batch Onboarding</strong> record. This is the school↔batch link: it says which school joins this batch, which course verticals run there, and the grade range. Saving it generates that school's <strong>batch keyword</strong> — the identifier the student import uses to route each student to the right school and courses. School records themselves must already exist; create any new schools before this step.</li>
+<li>Create a <strong>BatchProgramRun (BPR)</strong> for the batch and attach the Glific flow IDs from Step 2.</li>
+</ul>
+<p><img alt="The Batch form" src="../images/operator-tutorial/01-batch-form.png" />
+<em>The Batch form: batch ID, start and end dates, total weeks, grace window days, and the current calendar week.</em></p>
+<p><img alt="The Batch Onboarding form" src="../images/operator-tutorial/02-batch-onboarding.png" />
+<em>A Batch Onboarding record linking one school to the batch — note the generated batch keyword near the bottom; it goes in the student CSV.</em></p>
+<p><img alt="The BatchProgramRun form" src="../images/operator-tutorial/03-bpr-form.png" />
+<em>The BatchProgramRun: linked batch, the five Glific flow IDs from Step 2, and the run status (draft until validation and activation).</em></p>
+<h3 id="step-5-import-students">Step 5 — Import students</h3>
+<p>Prepare the student CSV. Each row needs: student identity (name, phone), language, course level, the school's <strong>batch keyword</strong> from Step 4, <strong>archetype</strong>, and <strong>experiment_arm</strong> (the last two supplied by you/upstream — see the rule in Part 1). Upload via the Backend Student Onboarding import. The import runs in two phases: first it creates the student records and resolves their school and course levels; then it syncs them to Glific in chunks, creates their enrollment rows, and places everyone in week 1, ready to start.</p>
+<p><img alt="A Backend Student Onboarding set ready to process" src="../images/operator-tutorial/04-student-import.png" />
+<em>An import set mid-setup: the CSV attached on the left, the parsed student rows (with batch keyword, archetype, and experiment arm) waiting in Draft before processing.</em></p>
+<h3 id="step-6-validate-and-activate">Step 6 — Validate and activate</h3>
+<ul>
+<li>Run the pre-launch validation (engineering runs <code>validate_bpr</code>) — it checks content, flows, and configuration are complete.</li>
+<li>Activation is automatic: on the batch's start date, the daily check activates the run. From that moment the schedulers take over.</li>
+</ul>
+<p><strong>You do not need to "start" anything manually after this point.</strong></p>
+<h2 id="part-4-during-the-run-whats-automatic-vs-what-you-do">Part 4 — During the run: what's automatic vs. what you do</h2>
+<h3 id="automatic-no-action-needed">Automatic (no action needed)</h3>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Every minute</td>
+<td>Dispatcher processes every student whose next action is due</td>
+</tr>
+<tr>
+<td>Tuesday ~9:00 IST</td>
+<td>Week's content broadcast to the batch's WhatsApp group</td>
+</tr>
+<tr>
+<td>Monday 00:00 UTC</td>
+<td>Calendar week advances; weekly counters reset; paused students resume</td>
+</tr>
+<tr>
+<td>Every 2 hours</td>
+<td>Escalation sweep</td>
+</tr>
+<tr>
+<td>Hourly</td>
+<td>Watchdog flags any submission stuck waiting for feedback &gt;2h</td>
+</tr>
+<tr>
+<td>Continuously</td>
+<td>Points/gems/streaks, state changes, Glific group moves, event logging</td>
+</tr>
+</tbody>
+</table>
+<h3 id="your-weekly-monitoring-routine-1015-minutes">Your weekly monitoring routine (10–15 minutes)</h3>
+<ol>
+<li><strong>Cohort health:</strong> ask engineering to run <code>cohort_status_breakdown(batch)</code> — shows how many students are in each state. Watch for unusual spikes in escalated or dropped.</li>
+<li><strong>Stuck feedback:</strong> check the watchdog log for submissions stuck &gt;2 hours.</li>
+<li><strong>Failure queue (DLQ):</strong> any failed external calls (WhatsApp pushes, parent calls) that need replay after an outage.</li>
+<li><strong>Error log:</strong> any recurring errors.</li>
+</ol>
+<p><img alt="The enrollment list filtered to one batch" src="../images/operator-tutorial/06-pe-list-states.png" />
+<em>The ProgramEnrollment list filtered to one batch — each student's current state, week, and points at a glance.</em></p>
+<h3 id="looking-up-one-student">Looking up one student</h3>
+<p>When a teacher or parent asks "what's happening with this student?", engineering can answer in seconds with the console toolkit:</p>
+<ul>
+<li><code>pe_health(student_id)</code> — full three-way check: our record vs. what Glific shows vs. what the API returns.</li>
+<li><code>pe_events(student_id)</code> — the student's complete event history (every transition, nudge, submission).</li>
+<li><code>cohort_drift(batch)</code> — checks whether our records and WhatsApp group memberships have drifted.</li>
+<li><code>enqueue_health()</code> / <code>queue_failures_for(...)</code> — is the background machinery keeping up.</li>
+</ul>
+<p><img alt="One student's event history" src="../images/operator-tutorial/07-event-log.png" />
+<em>The event log filtered to one student: every content delivery, submission, points award, state change, and week advance, with what triggered it.</em></p>
+<h3 id="if-whatsapp-glific-goes-down">If WhatsApp (Glific) goes down</h3>
+<p>Nothing is lost. The system keeps recording everything locally, retries automatically, and parks anything that exhausts retries in a visible queue for replay once Glific recovers. The database here is always the source of truth; Glific is a mirror.</p>
+<h2 id="part-5-end-of-program">Part 5 — End of program</h2>
+<p>Completion is automatic: when a student's week passes the final week, they're marked completed and moved to the completed group with a celebration message. Close-out is light:</p>
+<ol>
+<li>Engineering runs the stale-scheduler cleanup (<code>audit_and_null_stale_next_action_at</code>).</li>
+<li>Export the cohort analytics you need: completion rate, drop reasons, weekly submission rates (all derivable from the enrollment rows and event log).</li>
+<li>Mark the Batch completed; retire any one-off parent-call script.</li>
+<li>Hold a short retrospective — escalation timing and archetype plans are the usual tuning candidates for the next batch.</li>
+</ol>
+<h2 id="part-6-running-the-next-batch-or-a-new-program">Part 6 — Running the <em>next</em> batch or a <em>new</em> program</h2>
+<ul>
+<li><strong>Next batch, same program:</strong> repeat Steps 4–6, plus one mechanical part of Step 3: duplicate the previous batch's ArchetypeConfig records and re-point them at the new batch (configs attach to a batch — see Step 3), applying any tuning from the last retrospective. Content, Glific fields, flows, and parent-call setup are already in place. Setup effort: roughly a day, dominated by preparing the student CSV.</li>
+<li><strong>New program:</strong> the engine, scheduler, WhatsApp layer, escalation machinery, feedback pipeline, and gamification all carry over (see <code>reusable-components.md</code>). What's genuinely new work is the content (Step 1), the WhatsApp flow copy (Step 2), and the program's rules — states, week count, escalation plans, scoring.</li>
+</ul>
+<h2 id="quick-reference-glossary">Quick-reference glossary</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Batch</strong></td>
+<td>A cohort of students with a shared calendar (start date, weeks)</td>
+</tr>
+<tr>
+<td><strong>Batch Onboarding</strong></td>
+<td>The record linking one school to one batch (verticals + grade range); generates the school's batch keyword</td>
+</tr>
+<tr>
+<td><strong>Batch keyword</strong></td>
+<td>Per-school-per-batch identifier (e.g. <code>&lt;batch&gt;-&lt;school&gt;BS00001</code>) used in the student CSV to route students</td>
+</tr>
+<tr>
+<td><strong>BPR</strong> (BatchProgramRun)</td>
+<td>One run of a program for one batch — the thing that gets activated</td>
+</tr>
+<tr>
+<td><strong>PE</strong> (ProgramEnrollment)</td>
+<td>One student's enrollment in one run — carries their state and progress</td>
+</tr>
+<tr>
+<td><strong>State</strong></td>
+<td>Where a student is in their journey (active, awaiting feedback, escalated, dropped, completed…)</td>
+</tr>
+<tr>
+<td><strong>Archetype</strong></td>
+<td>Student engagement profile (dormant / fence_sitter / irregular_submitter / submitter) — supplied in your data, drives the escalation plan</td>
+</tr>
+<tr>
+<td><strong>ArchetypeConfig</strong></td>
+<td>The per-batch record holding one archetype's escalation ladder and week rules, one per archetype × arm × path combination</td>
+</tr>
+<tr>
+<td><strong>Escalation ladder</strong></td>
+<td>The ordered nudge steps inside an ArchetypeConfig (help notes → voice note → parent call), each with its delay and points</td>
+</tr>
+<tr>
+<td><strong>Week rule</strong></td>
+<td>Per-week row in an ArchetypeConfig: the expected submission type and whether it's validated</td>
+</tr>
+<tr>
+<td><strong>Experiment arm</strong></td>
+<td>A/B group (default / arm_a / arm_b) — supplied in your data</td>
+</tr>
+<tr>
+<td><strong>Grace window</strong></td>
+<td>Per-student weekly countdown to submit before escalation begins</td>
+</tr>
+<tr>
+<td><strong>Glific</strong></td>
+<td>The WhatsApp messaging platform the system drives</td>
+</tr>
+<tr>
+<td><strong>DLQ</strong></td>
+<td>"Dead-letter queue" — failed external calls waiting for manual replay</td>
+</tr>
+<tr>
+<td><strong>Dispatcher</strong></td>
+<td>The every-minute engine that runs whatever each student needs next</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
