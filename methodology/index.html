@@ -1,0 +1,750 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../getting-started/">
+      
+      
+        <link rel="next" href="../product-playbook/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Methodology — why it's built this way - claude-cowork-code — Team Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#methodology-why-its-built-this-way" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="claude-cowork-code — Team Guide" class="md-header__button md-logo" aria-label="claude-cowork-code — Team Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            claude-cowork-code — Team Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Methodology — why it's built this way
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="claude-cowork-code — Team Guide" class="md-nav__button md-logo" aria-label="claude-cowork-code — Team Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    claude-cowork-code — Team Guide
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How to use claude-cowork-code
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adopt-for-new-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Adopt it for a new project
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../engineering-playbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Engineering playbook — CR → build → release
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Methodology — why it's built this way
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Methodology — why it's built this way
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-problem-this-solves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The problem this solves
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-two-tools-one-folder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Two tools, one folder
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-documents-are-the-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Documents are the interface
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-one-agent-per-step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. One agent per step
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-invariants-constraints-that-cant-be-self-edited" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. INVARIANTS — constraints that can't be self-edited
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-memory-that-compounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Memory that compounds
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-build-the-minimum-prove-it-then-expand" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Build the minimum, prove it, then expand
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-payoff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The payoff
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../product-playbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product playbook — idea → BR / PRD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../publishing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Publishing the guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-problem-this-solves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The problem this solves
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-two-tools-one-folder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Two tools, one folder
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-documents-are-the-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Documents are the interface
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-one-agent-per-step" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. One agent per step
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-invariants-constraints-that-cant-be-self-edited" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. INVARIANTS — constraints that can't be self-edited
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-memory-that-compounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Memory that compounds
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-build-the-minimum-prove-it-then-expand" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Build the minimum, prove it, then expand
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-payoff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The payoff
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="methodology-why-its-built-this-way">Methodology — why it's built this way</h1>
+<p>The agents and skills change per project. These principles don't. Understanding them is what lets you <em>drive</em> the system instead of just typing at it.</p>
+<h2 id="the-problem-this-solves">The problem this solves</h2>
+<p>An LLM building software on its own tends to: lose context between sessions, repeat mistakes it already made, and blur planning into building until nobody can tell what was decided versus improvised. This system is six principles that fight each of those.</p>
+<h2 id="1-two-tools-one-folder">1. Two tools, one folder</h2>
+<p><strong>Cowork plans. Claude Code builds. They share one folder and never write the same file at the same time.</strong></p>
+<p>Planning (specs, CRs, reviews) and building (code, tests) are different modes of thought, and interleaving them is how half-built ideas get shipped. Splitting them across two tools — one without a terminal — makes the boundary physical. Work flows <strong>plan → build → review</strong>, sequentially.</p>
+<h2 id="2-documents-are-the-interface">2. Documents are the interface</h2>
+<p>Handoffs travel through <strong>named files in <code>docs/</code></strong>, never through chat memory:</p>
+<ul>
+<li><strong>PRD</strong> — the what &amp; why of a new feature.</li>
+<li><strong>BR</strong> — a bug report for a non-trivial defect.</li>
+<li><strong>CR</strong> — a scoped change to existing behavior. <strong>Immutable once approved</strong> — append-only after.</li>
+<li><strong>ADR</strong> — an architecture decision, with its trade-offs, recorded forever.</li>
+</ul>
+<p>A document is reviewable, diffable, and survives the session. Chat doesn't. "Implement CR-012" works tomorrow, on another machine, for another person — because CR-012 is a file. This is also what lets the Cowork↔Code boundary exist at all: the tools don't share memory, but they share the folder.</p>
+<h2 id="3-one-agent-per-step">3. One agent per step</h2>
+<p>Eight narrow roles instead of one do-everything agent. Each does a single job well and hands off:</p>
+<pre><code>prd-author → (architecture-reviewer?) → task-manager → feature-builder → code-reviewer + test-runner
+change-requirement → (architecture-reviewer?) → feature-builder → code-reviewer + test-runner
+                                                                          ↓ (recurring issue)
+                                                                    retrospective
+</code></pre>
+<p>Narrow agents are easier to trust, easier to review, and easier to regenerate for a new stack. A wide agent hides its reasoning; a narrow one's output <em>is</em> a checkable artifact.</p>
+<h2 id="4-invariants-constraints-that-cant-be-self-edited">4. INVARIANTS — constraints that can't be self-edited</h2>
+<p>Every agent file has a fenced <code>## INVARIANTS (do not edit)</code> block listing its core job and the rules it must never weaken — even when the system is editing <em>itself</em>. The retrospective agent (principle 5) can rewrite skills and agents, but it is forbidden from touching anything inside an INVARIANTS fence, including its own. To change an invariant, it files a task for a human.</p>
+<p>This is the safety rail that makes self-improvement safe: the system can get smarter without being able to remove its own guardrails.</p>
+<h2 id="5-memory-that-compounds">5. Memory that compounds</h2>
+<p>The system remembers, in <code>.claude/memory/</code>:</p>
+<ul>
+<li><strong><code>lessons.md</code></strong> — load-bearing rules. <strong>Append-and-supersede only</strong>: a rule is never reworded or deleted; a wrong one is marked superseded with a pointer (ADR-style), so the history of <em>why</em> survives.</li>
+<li><strong><code>patterns.md</code></strong> — canonical code idioms to reuse instead of reinventing.</li>
+<li><strong>Append logs</strong> — code-review findings, test failures, decisions.</li>
+</ul>
+<p>The <strong>retrospective agent</strong> reads all of it plus recent git history, finds patterns (a mistake that recurs ≥3 times, or one high-consequence bug), and turns each into a one-line rule that prevents the next occurrence. It audits its <em>own</em> past edits, too — a rule that didn't actually reduce the problem it targeted gets flagged.</p>
+<p>Two safety dials:</p>
+<ul>
+<li><strong>Autonomy</strong> — start <strong>proposal-only</strong> (it suggests; you apply). Graduate to <strong>closed-loop</strong> (it auto-applies, git is the rollback) once proposals are consistently good.</li>
+<li><strong>Circuit breaker</strong> — lanes (<code>skills</code>, <code>agents</code>, <code>memory</code>) that can be paused. A closed lane blocks writes there until a human reopens it.</li>
+</ul>
+<p>This is the compounding part: each recurring mistake becomes a rule, so the project gets <em>more</em> correct over time instead of drifting.</p>
+<h2 id="6-build-the-minimum-prove-it-then-expand">6. Build the minimum, prove it, then expand</h2>
+<p>Tooling follows the same MVP discipline as features: build only what the current work needs; expand because a measurement failed or a real need showed up, never because building has momentum. TAP LMS started single-tier memory and deferred a second tier, deferred a weekly cron, and kept deployment manual — each revisited only when evidence demanded. Apply the same restraint to your own layer: don't add an agent, a memory tier, or a skill until the work asks for it.</p>
+<h2 id="the-payoff">The payoff</h2>
+<p>Plan and build stop colliding (1, 2). Decisions become durable and reviewable (2). Each step is a checkable artifact (3). The system can improve itself without removing its guardrails (4, 5). And it stays small until evidence says otherwise (6).</p>
+<p>The result: a build loop that closes itself — write the spec, build it, review and test it, learn from it — and gets more correct the longer you run it.</p>
+<p>→ Now apply it: <a href="../product-playbook/">Product playbook</a> · <a href="../engineering-playbook/">Engineering playbook</a> · <a href="../adopt-for-new-project/">Adopt it for a new project</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
